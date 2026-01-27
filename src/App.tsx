@@ -7,7 +7,7 @@ import { TaskInput } from "./components/TaskInput";
 import { CompletedQuests } from "./components/CompletedQuests";
 import { SettingsModal } from "./components/SettingsModal";
 import { themes } from "./utils/themes";
-import { Settings, Gamepad2 } from './components/icons';
+import { Settings, Gamepad2, Sun, Moon } from "./components/icons";
 
 function App() {
   const {
@@ -69,13 +69,22 @@ function App() {
           <h1 className={`text-xl tracking-tight ${theme.text} pixel-no-select terminal-glow`}>
             ◆ POMODORO
           </h1>
-          <button
-            onClick={() => setIsSettingsOpen(true)}
-            className={`pixel-btn text-[10px] px-3 py-2 border-4 cursor-pointer flex items-center gap-2 ${theme.border} ${theme.surface} hover:opacity-80 transition-opacity pixel-no-select`}
-          >
-            <Settings size={14} />
-            <span>SETTINGS</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => updateSettings({ theme: settings.theme === 'dark' ? 'light' : 'dark' })}
+              className={`pixel-btn text-[10px] px-3 py-2 border-4 cursor-pointer flex items-center justify-center ${theme.border} ${theme.surface} hover:opacity-80 transition-opacity pixel-no-select`}
+              title={`Switch to ${settings.theme === 'dark' ? 'light' : 'dark'} theme`}
+            >
+              {settings.theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+            </button>
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className={`pixel-btn text-[10px] px-3 py-2 border-4 cursor-pointer flex items-center gap-2 ${theme.border} ${theme.surface} hover:opacity-80 transition-opacity pixel-no-select`}
+            >
+              <Settings size={14} />
+              <span>SETTINGS</span>
+            </button>
+          </div>
         </header>
 
         {/* Main Timer Card */}
