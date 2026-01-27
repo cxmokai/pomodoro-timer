@@ -7,7 +7,7 @@ import { TaskInput } from "./components/TaskInput";
 import { CompletedQuests } from "./components/CompletedQuests";
 import { SettingsModal } from "./components/SettingsModal";
 import { themes } from "./utils/themes";
-import { Settings, Gamepad2, Sun, Moon } from "./components/icons";
+import { Settings, Sun, Moon, Diamond, Timer, Check } from "./components/icons";
 
 function App() {
   const {
@@ -62,33 +62,42 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${theme.bg} scanlines pixel-grid crt-vignette`}>
-      <div className="container mx-auto px-4 py-6 max-w-2xl pixel-slide-in">
+    <div className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${theme.bg} brutal-fade-in`}>
+      <div className="container mx-auto px-4 py-6 max-w-2xl brutal-slide-in">
         {/* Header */}
         <header className="flex justify-between items-center mb-12">
-          <h1 className={`text-xl tracking-tight ${theme.text} pixel-no-select terminal-glow`}>
-            ◆ POMODORO
+          <h1 className={`text-2xl tracking-tight ${theme.text} no-select flex items-center gap-2`}>
+            <Diamond className="w-4 h-4" />
+            POMODORO
           </h1>
           <div className="flex items-center gap-3">
             <button
               onClick={() => updateSettings({ theme: settings.theme === 'dark' ? 'light' : 'dark' })}
-              className={`pixel-btn text-[10px] px-3 py-2 border-4 cursor-pointer flex items-center justify-center ${theme.border} ${theme.surface} hover:opacity-80 transition-opacity pixel-no-select`}
+              className={`brutal-btn text-sm px-3 py-2 flex items-center justify-center cursor-pointer no-select`}
+              style={{
+                background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                color: theme.text.replace('text-[', '').replace(']', ''),
+              }}
               title={`Switch to ${settings.theme === 'dark' ? 'light' : 'dark'} theme`}
             >
-              {settings.theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              {settings.theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setIsSettingsOpen(true)}
-              className={`pixel-btn text-[10px] px-3 py-2 border-4 cursor-pointer flex items-center gap-2 ${theme.border} ${theme.surface} hover:opacity-80 transition-opacity pixel-no-select`}
+              className={`brutal-btn text-sm px-3 py-2 flex items-center gap-2 cursor-pointer no-select`}
+              style={{
+                background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                color: theme.text.replace('text-[', '').replace(']', ''),
+              }}
             >
-              <Settings size={14} />
+              <Settings className="w-4 h-4" />
               <span>SETTINGS</span>
             </button>
           </div>
         </header>
 
         {/* Main Timer Card */}
-        <div className={`p-8 mb-8 border-4 ${theme.border} ${theme.surface} ${theme.shadow}`}>
+        <div className={`p-8 mb-8 brutal-card ${theme.surface}`}>
           <ModeIndicator mode={mode} currentTheme={settings.theme} />
 
           <div className="flex justify-center my-8">
@@ -97,6 +106,7 @@ function App() {
               initialDuration={initialDuration}
               mode={mode}
               currentTheme={settings.theme}
+              isRunning={isRunning}
             />
           </div>
 
@@ -110,10 +120,10 @@ function App() {
         </div>
 
         {/* Task Input */}
-        <div className={`p-5 border-4 ${theme.border} ${theme.surface} ${theme.shadow} mb-6`}>
-          <div className={`flex items-center gap-2 mb-3 ${theme.textMuted} pixel-no-select`}>
-            <span className="text-xl">⚔</span>
-            <span className="text-[10px]">CURRENT QUEST</span>
+        <div className={`p-5 brutal-card mb-6 ${theme.surface}`}>
+          <div className={`flex items-center gap-2 mb-3 ${theme.textMuted} no-select`}>
+            <Timer className="w-5 h-5" />
+            <span className="text-sm">CURRENT QUEST</span>
           </div>
           <TaskInput
             currentTheme={settings.theme}
@@ -129,10 +139,10 @@ function App() {
 
         {/* Stats Footer */}
         <footer className="flex justify-between items-center mt-6">
-          <div className={`flex items-center gap-2 ${theme.textMuted} pixel-no-select`}>
-            <Gamepad2 size={18} />
-            <span className="text-[10px]">
-              SESSIONS: <span className={`${theme.text} terminal-glow`}>{sessionCount}</span>
+          <div className={`flex items-center gap-2 ${theme.textMuted} no-select`}>
+            <Check className="w-5 h-5" />
+            <span className="text-sm">
+              SESSIONS: <span className={`${theme.text}`}>{sessionCount}</span>
             </span>
           </div>
         </footer>

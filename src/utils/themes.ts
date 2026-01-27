@@ -20,57 +20,57 @@ export interface Theme {
 export const themes: Record<string, Theme> = {
   dark: {
     name: 'Dark',
-    bg: 'bg-[#0a0a0a]',
-    surface: 'bg-[#111111]',
-    surfaceHighlight: 'bg-[#1a1a1a]',
-    shadow: 'shadow-[4px_4px_0px_0px_#050505]',
-    text: 'text-[#00ff41]',
-    textMuted: 'text-[#4a664a]',
-    accent: '#00ff41',
-    accentHover: 'hover:text-[#00cc33]',
-    border: 'border-[#333333]',
-    input: 'bg-[#0a0a0a] border-[#333333] text-[#00ff41] placeholder:text-[#4a664a]',
-    ring: '#00ff41',
-    button: 'bg-[#1a1a1a] hover:bg-[#222222] text-[#00ff41] border-[#333333]',
-    buttonPrimary: 'bg-[#00ff41] hover:bg-[#00cc33] text-[#0a0a0a] border-[#00ff41]',
-    buttonSecondary: 'bg-[#1a1a1a] hover:bg-[#222222] text-[#00ff41] border-[#333333]',
-    modal: 'bg-[#111111] border-[#333333]',
+    bg: 'bg-[#1a1a1a]',
+    surface: 'bg-[#2d2d2d]',
+    surfaceHighlight: 'bg-[#3d3d3d]',
+    shadow: 'shadow-[4px_4px_0px_0px_#555555]',
+    text: 'text-[#ffffff]',
+    textMuted: 'text-[#aaaaaa]',
+    accent: '#FF6B35',
+    accentHover: 'hover:text-[#ff8555]',
+    border: 'border-[#4a4a4a]',
+    input: 'bg-[#1a1a1a] border-[#4a4a4a] text-[#ffffff] placeholder:text-[#aaaaaa]',
+    ring: '#FF6B35',
+    button: 'bg-[#3d3d3d] hover:bg-[#4d4d4d] text-[#ffffff] border-[#4a4a4a]',
+    buttonPrimary: 'bg-[#FF6B35] hover:bg-[#ff8555] text-[#000000] border-[#4a4a4a]',
+    buttonSecondary: 'bg-[#3d3d3d] hover:bg-[#4d4d4d] text-[#ffffff] border-[#4a4a4a]',
+    modal: 'bg-[#2d2d2d] border-[#4a4a4a]',
   },
   light: {
     name: 'Light',
     bg: 'bg-[#ffffff]',
     surface: 'bg-[#f5f5f5]',
     surfaceHighlight: 'bg-[#e8e8e8]',
-    shadow: 'shadow-[4px_4px_0px_0px_#d0d0d0]',
-    text: 'text-[#1a1a1a]',
+    shadow: 'shadow-[4px_4px_0px_0px_#000000]',
+    text: 'text-[#000000]',
     textMuted: 'text-[#666666]',
-    accent: '#00aa35',
-    accentHover: 'hover:text-[#008829]',
-    border: 'border-[#cccccc]',
-    input: 'bg-[#ffffff] border-[#cccccc] text-[#1a1a1a] placeholder:text-[#888888]',
-    ring: '#00aa35',
-    button: 'bg-[#e8e8e8] hover:bg-[#d8d8d8] text-[#1a1a1a] border-[#cccccc]',
-    buttonPrimary: 'bg-[#00aa35] hover:bg-[#008829] text-[#ffffff] border-[#00aa35]',
-    buttonSecondary: 'bg-[#e8e8e8] hover:bg-[#d8d8d8] text-[#1a1a1a] border-[#cccccc]',
-    modal: 'bg-[#f5f5f5] border-[#cccccc]',
+    accent: '#FF6B35',
+    accentHover: 'hover:text-[#ff8555]',
+    border: 'border-[#000000]',
+    input: 'bg-[#ffffff] border-[#000000] text-[#000000] placeholder:text-[#666666]',
+    ring: '#FF6B35',
+    button: 'bg-[#e8e8e8] hover:bg-[#d8d8d8] text-[#000000] border-[#000000]',
+    buttonPrimary: 'bg-[#FF6B35] hover:bg-[#ff8555] text-[#ffffff] border-[#000000]',
+    buttonSecondary: 'bg-[#e8e8e8] hover:bg-[#d8d8d8] text-[#000000] border-[#000000]',
+    modal: 'bg-[#f5f5f5] border-[#000000]',
   },
 }
 
 export const modeColors: Record<string, { name: string; color: string; bg: string }> = {
   work: {
     name: 'WORK MODE',
-    color: '#00ff41',
-    bg: 'bg-[#00ff41]',
+    color: '#FF6B35',
+    bg: 'bg-[#FF6B35]',
   },
   shortBreak: {
     name: 'SHORT BREAK',
-    color: '#00cc33',
-    bg: 'bg-[#00cc33]',
+    color: '#FFB347',
+    bg: 'bg-[#FFB347]',
   },
   longBreak: {
     name: 'LONG BREAK',
-    color: '#009926',
-    bg: 'bg-[#009926]',
+    color: '#FF8C42',
+    bg: 'bg-[#FF8C42]',
   },
 }
 
@@ -81,6 +81,12 @@ export interface Settings {
   longBreakInterval: number
   soundEnabled: boolean
   theme: string
+}
+
+export interface CompletedQuest {
+  id: string
+  title: string
+  completedAt: number
 }
 
 export const defaultSettings: Settings = {

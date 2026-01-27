@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Trash2, CheckCircle } from './icons';
+import { Trash2, Check, ChevronRight, ChevronDown, ChevronUp } from './icons';
 import { themes } from "../utils/themes";
 import type { CompletedQuest } from "../utils/themes";
 
@@ -8,9 +8,11 @@ interface CompletedQuestsProps {
   triggerUpdate?: number;
 }
 
+type ExpandState = 'collapsed' | 'partial' | 'expanded';
+
 export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuestsProps) => {
   const [quests, setQuests] = useState<CompletedQuest[]>([]);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [expandState, setExpandState] = useState<ExpandState>('collapsed');
   const theme = themes[currentTheme];
 
   useEffect(() => {
@@ -49,69 +51,104 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
 
   if (quests.length === 0) return null;
 
-  const displayQuests = isExpanded ? quests : quests.slice(0, 3);
+  const handleHeaderClick = () => {
+    if (expandState === 'collapsed') {
+      setExpandState('partial');
+    } else if (expandState === 'partial') {
+      setExpandState('collapsed');
+    } else {
+      setExpandState('partial');
+    }
+  };
+
+  const displayQuests = expandState === 'expanded' ? quests : quests.slice(0, 3);
+  const showList = expandState !== 'collapsed';
+  const showMoreButton = quests.length > 3 && expandState !== 'collapsed';
 
   return (
-    <div className={`border-4 ${theme.border} ${theme.surface} ${theme.shadow} mt-6`}>
+    <div className={`brutal-card mt-6 ${theme.surface}`}>
       {/* Header */}
       <div
-        className={`flex items-center justify-between p-4 border-b-4 ${theme.border} cursor-pointer`}
-        onClick={() => setIsExpanded(!isExpanded)}
+        className={`flex items-center justify-between p-4 border-b-4 cursor-pointer transition-colors`}
+        style={{ borderColor: '#000000' }}
+        onClick={handleHeaderClick}
       >
-        <div className={`flex items-center gap-3 ${theme.text} pixel-no-select`}>
-          <span className="text-2xl">⭐</span>
-          <span className="text-[10px]">
+        <div className={`flex items-center gap-3 ${theme.text} no-select`}>
+          <Check className="w-5 h-5" style={{ color: '#FF6B35' }} />
+          <span className="text-sm">
             COMPLETED QUESTS ({quests.length})
           </span>
         </div>
-        <span className={`text-xl ${theme.text} pixel-no-select`}>
-          {isExpanded ? "▼" : "▶"}
+        <span
+          className={`no-select transition-transform duration-300 ${
+            showList ? 'rotate-90' : ''
+          }`}
+        >
+          <ChevronRight className="w-5 h-5" />
         </span>
       </div>
 
-      {/* Quest List */}
-      <div className="p-4 space-y-2 max-h-[300px] overflow-y-auto">
-        {displayQuests.map((quest) => (
-          <div
-            key={quest.id}
-            className={`flex items-center justify-between p-3 border-4 ${theme.border} ${theme.surfaceHighlight} transition-all duration-200`}
-            style={{
-              boxShadow: `2px 2px 0 0 rgba(0,0,0,0.15)`,
-            }}
-          >
-            <div className="flex-1 min-w-0">
-              <div className={`text-[10px] ${theme.text} truncate pixel-no-select`}
-                style={{
-                  textDecoration: 'line-through',
-                  opacity: 0.7,
-                }}
-              >
-                {quest.title}
-              </div>
-              <div className={`text-[8px] ${theme.textMuted} mt-1 pixel-no-select`}>
-                {formatTime(quest.completedAt)}
-              </div>
-            </div>
-            <button
-              onClick={() => deleteQuest(quest.id)}
-              className={`ml-3 px-3 py-2 border-4 text-sm cursor-pointer ${theme.buttonSecondary} pixel-btn pixel-no-select`}
+      {/* Quest List - Only show when not collapsed */}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          showList ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="p-4 space-y-2 overflow-y-auto">
+          {displayQuests.map((quest, index) => (
+            <div
+              key={quest.id}
+              className={`flex items-center justify-between p-3 brutal-card ${theme.surfaceHighlight} transition-all duration-200`}
               style={{
-                textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+                animation: `brutal-slide-in 0.2s ease-out ${index * 50}ms both`,
               }}
             >
-              <Trash2 size={14} />
-            </button>
-          </div>
-        ))}
+              <div className="flex-1 min-w-0">
+                <div className={`text-sm ${theme.text} truncate no-select`}
+                  style={{
+                    textDecoration: 'line-through',
+                    opacity: 0.7,
+                  }}
+                >
+                  {quest.title}
+                </div>
+                <div className={`text-xs ${theme.textMuted} mt-1 no-select`}>
+                  {formatTime(quest.completedAt)}
+                </div>
+              </div>
+              <button
+                onClick={() => deleteQuest(quest.id)}
+                className={`ml-3 px-3 py-2 brutal-btn cursor-pointer no-select`}
+                style={{
+                  background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Show More/Less */}
-      {quests.length > 3 && (
+      {/* Show More/Less Button */}
+      {showMoreButton && (
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className={`w-full p-3 border-t-4 ${theme.border} text-[9px] ${theme.textMuted} hover:${theme.text} cursor-pointer transition-colors pixel-no-select`}
+          onClick={() => setExpandState(expandState === 'expanded' ? 'partial' : 'expanded')}
+          className={`w-full p-3 border-t-4 text-sm ${theme.textMuted} hover:${theme.text} cursor-pointer transition-colors no-select flex items-center justify-center gap-2`}
+          style={{ borderColor: '#000000' }}
         >
-          {isExpanded ? "▲ SHOW LESS" : `▼ SHOW ${quests.length - 3} MORE`}
+          {expandState === 'expanded' ? (
+            <>
+              <ChevronUp className="w-4 h-4" />
+              SHOW LESS
+            </>
+          ) : (
+            <>
+              <ChevronDown className="w-4 h-4" />
+              SHOW {quests.length - 3} MORE
+            </>
+          )}
         </button>
       )}
     </div>

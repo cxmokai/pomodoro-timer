@@ -43,7 +43,7 @@ export const useTimer = () => {
           return settings.workDuration * 60;
       }
     },
-    [settings],
+    [settings.workDuration, settings.shortBreakDuration, settings.longBreakDuration],
   );
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Target, Check } from "./icons";
+import { Check } from "./icons";
 import { themes } from "../utils/themes";
 import type { CompletedQuest } from "../utils/themes";
 
@@ -67,28 +67,29 @@ export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => 
               }
             }}
             placeholder="Enter your quest..."
-            className={`w-full px-4 py-3 text-[10px] border-4 ${theme.input} pixel-input pixel-no-select`}
+            className={`w-full px-4 py-3 text-sm brutal-input no-select`}
             style={{
-              fontFamily: "'Press Start 2P', cursive",
-              boxShadow: `inset 2px 2px 0 0 rgba(0,0,0,0.15)`,
+              background: theme.bg.replace('bg-[', '').replace(']', ''),
+              color: theme.text.replace('text-[', '').replace(']', ''),
             }}
             autoFocus
           />
         ) : (
           <div
             onClick={() => !isCompleted && setIsEditing(true)}
-            className={`w-full px-4 py-3 border-4 cursor-pointer transition-all duration-100 pixel-btn pixel-btn-hover pixel-cursor-pointer flex items-center gap-2 ${
+            className={`w-full px-4 py-3 cursor-pointer brutal-btn no-select flex items-center ${
               task ? theme.surfaceHighlight : theme.bg
-            } ${theme.border} ${isCompleted ? 'opacity-50' : ''}`}
+            } ${isCompleted ? 'opacity-50' : ''}`}
             style={{
-              boxShadow: task
-                ? `2px 2px 0 0 rgba(0,0,0,0.15)`
-                : `inset 2px 2px 0 0 rgba(0,0,0,0.1)`,
+              background: task
+                ? theme.surfaceHighlight.replace('bg-[', '').replace(']', '')
+                : theme.bg.replace('bg-[', '').replace(']', ''),
+              color: task
+                ? theme.text.replace('text-[', '').replace(']', '')
+                : theme.textMuted.replace('text-[', '').replace(']', ''),
             }}
           >
-            <Target size={16} className={task ? theme.text : theme.textMuted} />
             <span
-              className={task ? theme.text : `${theme.textMuted} italic`}
               style={{
                 textDecoration: isCompleted ? 'line-through' : 'none',
               }}
@@ -104,18 +105,14 @@ export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => 
         <button
           onClick={handleComplete}
           disabled={isCompleted}
-          className={`pixel-btn px-5 py-3 border-4 flex items-center justify-center cursor-pointer transition-all duration-100 pixel-no-select ${
-            isCompleted
-              ? 'bg-[#00ff88] border-[#00cc6a] text-[#0d0221]'
-              : theme.buttonPrimary
-          }`}
+          className={`brutal-btn px-5 py-3 flex items-center justify-center cursor-pointer no-select`}
           style={{
-            boxShadow: isCompleted
-              ? '2px 2px 0 0 rgba(0,0,0,0.2)'
-              : '4px 4px 0 0 rgba(0,0,0,0.2)',
+            background: isCompleted ? '#FFB347' : '#FF6B35',
+            color: '#000000',
+            opacity: isCompleted ? 0.7 : 1,
           }}
         >
-          <Check size={18} />
+          <Check className="w-[18px] h-[18px]" />
         </button>
       )}
     </div>

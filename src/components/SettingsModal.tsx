@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Volume2, VolumeX, X } from "./icons";
+import { Volume2, VolumeX, X, Settings as SettingsIcon } from "./icons";
 import { themes, type Settings } from "../utils/themes";
 
 interface SettingsProps {
@@ -43,47 +43,43 @@ export const SettingsModal = ({
 
   if (!isOpen) return null;
 
-  const isTerminal = currentTheme === 'terminal';
-
   return (
     <div
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl pixel-slide-in"
+        className="w-full max-w-2xl brutal-slide-in"
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: '#111111',
-          border: '4px solid #333333',
-          boxShadow: '8px 8px 0 0 rgba(0,0,0,0.5)',
+          background: theme.surface.replace('bg-[', '').replace(']', ''),
+          border: '4px solid #000000',
+          boxShadow: '8px 8px 0 0 #000000',
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-4" style={{ borderColor: '#333333', background: '#0a0a0a' }}>
-          <h2 className="text-base pixel-no-select flex items-center gap-3" style={{ color: '#00ff41', textShadow: '0 0 10px rgba(0, 255, 65, 0.5)' }}>
-            <span style={{ fontSize: '20px' }}>⚙</span>
+        <div className="flex items-center justify-between p-6 border-b-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
+          <h2 className="text-lg no-select flex items-center gap-3" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+            <SettingsIcon className="w-5 h-5" />
             <span>SETTINGS</span>
           </h2>
           <button
             onClick={onClose}
-            className="pixel-btn px-4 py-2 border-4 cursor-pointer flex items-center justify-center pixel-no-select"
+            className="brutal-btn px-4 py-2 flex items-center justify-center cursor-pointer no-select"
             style={{
-              background: '#1a1a1a',
-              borderColor: '#333333',
-              color: '#00ff41',
+              background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
             }}
           >
-            <X size={18} />
+            <X className="w-[18px] h-[18px]" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto" style={{ background: '#111111' }}>
+        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto" style={{ background: theme.surface.replace('bg-[', '').replace(']', '') }}>
           {/* Duration Settings */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] mb-2 pixel-no-select" style={{ color: '#00ff41' }}>
+              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
                 WORK (min)
               </label>
               <input
@@ -94,18 +90,15 @@ export const SettingsModal = ({
                 onChange={(e) =>
                   handleChange("workDuration", parseInt(e.target.value))
                 }
-                className="w-full px-3 py-2 text-[10px] border-4 pixel-input pixel-no-select"
+                className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
-                  fontFamily: "'Press Start 2P', cursive",
-                  background: '#0a0a0a',
-                  borderColor: '#333333',
-                  color: '#00ff41',
-                  boxShadow: 'inset 2px 2px 0 0 rgba(0,0,0,0.3)',
+                  background: theme.bg.replace('bg-[', '').replace(']', ''),
+                  color: theme.text.replace('text-[', '').replace(']', ''),
                 }}
               />
             </div>
             <div>
-              <label className="block text-[10px] mb-2 pixel-no-select" style={{ color: '#00ff41' }}>
+              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
                 SHORT BREAK (min)
               </label>
               <input
@@ -116,13 +109,10 @@ export const SettingsModal = ({
                 onChange={(e) =>
                   handleChange("shortBreakDuration", parseInt(e.target.value))
                 }
-                className="w-full px-3 py-2 text-[10px] border-4 pixel-input pixel-no-select"
+                className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
-                  fontFamily: "'Press Start 2P', cursive",
-                  background: '#0a0a0a',
-                  borderColor: '#333333',
-                  color: '#00ff41',
-                  boxShadow: 'inset 2px 2px 0 0 rgba(0,0,0,0.3)',
+                  background: theme.bg.replace('bg-[', '').replace(']', ''),
+                  color: theme.text.replace('text-[', '').replace(']', ''),
                 }}
               />
             </div>
@@ -130,7 +120,7 @@ export const SettingsModal = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] mb-2 pixel-no-select" style={{ color: '#00ff41' }}>
+              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
                 LONG BREAK (min)
               </label>
               <input
@@ -141,18 +131,15 @@ export const SettingsModal = ({
                 onChange={(e) =>
                   handleChange("longBreakDuration", parseInt(e.target.value))
                 }
-                className="w-full px-3 py-2 text-[10px] border-4 pixel-input pixel-no-select"
+                className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
-                  fontFamily: "'Press Start 2P', cursive",
-                  background: '#0a0a0a',
-                  borderColor: '#333333',
-                  color: '#00ff41',
-                  boxShadow: 'inset 2px 2px 0 0 rgba(0,0,0,0.3)',
+                  background: theme.bg.replace('bg-[', '').replace(']', ''),
+                  color: theme.text.replace('text-[', '').replace(']', ''),
                 }}
               />
             </div>
             <div>
-              <label className="block text-[10px] mb-2 pixel-no-select" style={{ color: '#00ff41' }}>
+              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
                 INTERVAL
               </label>
               <input
@@ -163,57 +150,51 @@ export const SettingsModal = ({
                 onChange={(e) =>
                   handleChange("longBreakInterval", parseInt(e.target.value))
                 }
-                className="w-full px-3 py-2 text-[10px] border-4 pixel-input pixel-no-select"
+                className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
-                  fontFamily: "'Press Start 2P', cursive",
-                  background: '#0a0a0a',
-                  borderColor: '#333333',
-                  color: '#00ff41',
-                  boxShadow: 'inset 2px 2px 0 0 rgba(0,0,0,0.3)',
+                  background: theme.bg.replace('bg-[', '').replace(']', ''),
+                  color: theme.text.replace('text-[', '').replace(']', ''),
                 }}
               />
             </div>
           </div>
 
           {/* Sound Toggle */}
-          <div className="p-4 border-4" style={{ borderColor: '#333333', background: '#0a0a0a' }}>
-            <label className="flex items-center justify-between cursor-pointer pixel-cursor-pointer">
-              <span className="text-[10px] pixel-no-select" style={{ color: '#00ff41' }}>
+          <div className="p-4 border-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
+            <label className="flex items-center justify-between cursor-pointer">
+              <span className="text-sm no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
                 ENABLE SOUND
               </span>
               <div className="flex items-center gap-3">
-                <span style={{ color: '#00ff41' }}>
-                  {localSettings.soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                <span style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+                  {localSettings.soundEnabled ? <Volume2 className="w-[18px] h-[18px]" /> : <VolumeX className="w-[18px] h-[18px]" />}
                 </span>
                 <input
                   type="checkbox"
                   checked={localSettings.soundEnabled}
                   onChange={(e) => handleChange("soundEnabled", e.target.checked)}
-                  className="pixel-checkbox"
-                  style={{ accentColor: '#00ff41' }}
+                  className="brutal-checkbox"
                 />
               </div>
             </label>
           </div>
 
           {/* Keyboard Shortcuts */}
-          <div className="p-4 border-4" style={{ borderColor: '#333333', background: '#0a0a0a' }}>
-            <h3 className="text-[10px] mb-3 pixel-no-select" style={{ color: '#00ff41' }}>CONTROLS</h3>
+          <div className="p-4 border-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
+            <h3 className="text-sm mb-3 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>CONTROLS</h3>
             <div className="grid grid-cols-2 gap-3">
               {shortcuts.map((shortcut) => (
                 <div key={shortcut.key} className="flex justify-between items-center">
                   <kbd
-                    className="px-3 py-2 text-[8px] border-4 pixel-no-select"
+                    className="px-3 py-2 text-xs no-select brutal-card"
                     style={{
-                      borderColor: '#333333',
-                      background: '#1a1a1a',
-                      color: '#00ff41',
-                      boxShadow: '2px 2px 0 0 rgba(0,0,0,0.3)',
+                      background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                      color: theme.text.replace('text-[', '').replace(']', ''),
                     }}
                   >
                     {shortcut.key}
                   </kbd>
-                  <span className="text-[9px] pixel-no-select" style={{ color: '#00ff41' }}>
+                  <span className="text-sm no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
                     {shortcut.action}
                   </span>
                 </div>
@@ -222,19 +203,17 @@ export const SettingsModal = ({
           </div>
 
           {/* Theme Selector */}
-          <div className="p-4 border-4" style={{ borderColor: '#333333', background: '#0a0a0a' }}>
-            <h3 className="text-[10px] mb-3 pixel-no-select" style={{ color: '#00ff41' }}>THEME</h3>
+          <div className="p-4 border-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
+            <h3 className="text-sm mb-3 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>THEME</h3>
             <div className="grid grid-cols-3 gap-2">
               {Object.keys(themes).map((themeName) => (
                 <button
                   key={themeName}
                   onClick={() => handleChange('theme', themeName)}
-                  className="px-3 py-2 text-[8px] border-4 pixel-btn pixel-no-select"
+                  className="px-3 py-2 text-sm brutal-btn no-select"
                   style={{
-                    background: localSettings.theme === themeName ? '#00ff41' : '#1a1a1a',
-                    borderColor: localSettings.theme === themeName ? '#00ff41' : '#333333',
-                    color: localSettings.theme === themeName ? '#0a0a0a' : '#00ff41',
-                    textShadow: localSettings.theme === themeName ? 'none' : '0 0 5px rgba(0, 255, 65, 0.3)',
+                    background: localSettings.theme === themeName ? '#FF6B35' : theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                    color: localSettings.theme === themeName ? '#000000' : theme.text.replace('text-[', '').replace(']', ''),
                   }}
                 >
                   {themes[themeName].name.toUpperCase()}

@@ -23,22 +23,27 @@ export const Controls = ({
       {/* Start/Pause Button */}
       <button
         onClick={onToggle}
-        className={`pixel-btn pixel-btn-hover px-6 py-3 font-bold border-3 cursor-pointer flex items-center gap-2 ${
-          isRunning ? theme.buttonSecondary : theme.buttonPrimary
-        } transition-all duration-100 pixel-no-select`}
+        className={`brutal-btn px-6 py-3 flex items-center gap-2 cursor-pointer no-select ${
+          isRunning ? theme.button : theme.buttonPrimary
+        }`}
         style={{
-          textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+          background: isRunning
+            ? theme.surfaceHighlight.replace('bg-[', '').replace(']', '')
+            : '#FF6B35',
+          color: isRunning
+            ? theme.text.replace('text-[', '').replace(']', '')
+            : '#000000',
         }}
       >
         {isRunning ? (
           <>
-            <Pause size={20} />
-            <span className="text-[10px]">PAUSE</span>
+            <Pause className="w-5 h-5" />
+            <span className="text-sm">PAUSE</span>
           </>
         ) : (
           <>
-            <Play size={20} />
-            <span className="text-[10px]">START</span>
+            <Play className="w-5 h-5" />
+            <span className="text-sm">START</span>
           </>
         )}
       </button>
@@ -46,25 +51,27 @@ export const Controls = ({
       {/* Reset Button */}
       <button
         onClick={onReset}
-        className={`pixel-btn pixel-btn-hover px-6 py-3 font-bold border-3 cursor-pointer flex items-center gap-2 ${theme.button} transition-all duration-100 pixel-no-select`}
+        className={`brutal-btn px-6 py-3 flex items-center gap-2 cursor-pointer no-select ${theme.button}`}
         style={{
-          textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+          background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+          color: theme.text.replace('text-[', '').replace(']', ''),
         }}
       >
-        <RefreshCw size={20} />
-        <span className="text-[10px]">RESET</span>
+        <RefreshCw className="w-5 h-5" />
+        <span className="text-sm">RESET</span>
       </button>
 
       {/* Skip Button */}
       <button
         onClick={onSkip}
-        className={`pixel-btn pixel-btn-hover px-6 py-3 font-bold border-3 cursor-pointer flex items-center gap-2 ${theme.button} transition-all duration-100 pixel-no-select`}
+        className={`brutal-btn px-6 py-3 flex items-center gap-2 cursor-pointer no-select ${theme.button}`}
         style={{
-          textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+          background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+          color: theme.text.replace('text-[', '').replace(']', ''),
         }}
       >
-        <SkipForward size={20} />
-        <span className="text-[10px]">SKIP</span>
+        <SkipForward className="w-5 h-5" />
+        <span className="text-sm">SKIP</span>
       </button>
     </div>
   );
