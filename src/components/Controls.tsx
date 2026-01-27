@@ -1,10 +1,11 @@
-import { Play, Pause, RotateCcw } from "lucide-react";
 import { themes } from "../utils/themes";
+import { Play, Pause, RefreshCw, SkipForward } from 'pixelarticons';
 
 interface ControlsProps {
   isRunning: boolean;
   onToggle: () => void;
   onReset: () => void;
+  onSkip: () => void;
   currentTheme: string;
 }
 
@@ -12,26 +13,58 @@ export const Controls = ({
   isRunning,
   onToggle,
   onReset,
+  onSkip,
   currentTheme,
 }: ControlsProps) => {
   const theme = themes[currentTheme];
 
   return (
-    <div className="flex gap-4">
+    <div className="flex justify-center gap-4 flex-wrap">
+      {/* Start/Pause Button */}
       <button
         onClick={onToggle}
-        className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${theme.buttonPrimary}`}
+        className={`pixel-btn pixel-btn-hover px-6 py-3 font-bold border-3 cursor-pointer flex items-center gap-2 ${
+          isRunning ? theme.buttonSecondary : theme.buttonPrimary
+        } transition-all duration-100 pixel-no-select`}
+        style={{
+          textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+        }}
       >
-        {isRunning ? <Pause size={20} /> : <Play size={20} className="ml-1" />}
-        {isRunning ? "Pause" : "Start"}
+        {isRunning ? (
+          <>
+            <Pause size={20} />
+            <span className="text-[10px]">PAUSE</span>
+          </>
+        ) : (
+          <>
+            <Play size={20} />
+            <span className="text-[10px]">START</span>
+          </>
+        )}
       </button>
 
+      {/* Reset Button */}
       <button
         onClick={onReset}
-        className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${theme.buttonSecondary}`}
+        className={`pixel-btn pixel-btn-hover px-6 py-3 font-bold border-3 cursor-pointer flex items-center gap-2 ${theme.button} transition-all duration-100 pixel-no-select`}
+        style={{
+          textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+        }}
       >
-        <RotateCcw size={20} />
-        Reset
+        <RefreshCw size={20} />
+        <span className="text-[10px]">RESET</span>
+      </button>
+
+      {/* Skip Button */}
+      <button
+        onClick={onSkip}
+        className={`pixel-btn pixel-btn-hover px-6 py-3 font-bold border-3 cursor-pointer flex items-center gap-2 ${theme.button} transition-all duration-100 pixel-no-select`}
+        style={{
+          textShadow: '1px 1px 0 rgba(0,0,0,0.3)',
+        }}
+      >
+        <SkipForward size={20} />
+        <span className="text-[10px]">SKIP</span>
       </button>
     </div>
   );
