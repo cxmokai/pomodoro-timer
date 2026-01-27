@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Trash2, CheckCircle } from 'pixelarticons';
+import { Trash2, CheckCircle } from './icons';
 import { themes } from "../utils/themes";
 import type { CompletedQuest } from "../utils/themes";
 

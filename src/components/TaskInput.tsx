@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Target, Check } from "pixelarticons";
+import { Target, Check } from "./icons";
 import { themes } from "../utils/themes";
 import type { CompletedQuest } from "../utils/themes";
 

@@ -1,5 +1,5 @@
 import { themes } from "../utils/themes";
-import { Play, Pause, RefreshCw, SkipForward } from 'pixelarticons';
+import { Play, Pause, RefreshCw, SkipForward } from './icons';
 
 interface ControlsProps {
   isRunning: boolean;

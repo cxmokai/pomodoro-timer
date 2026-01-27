@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Volume2, VolumeX, X } from "pixelarticons";
+import { Volume2, VolumeX, X } from "./icons";
 import { themes, type Settings } from "../utils/themes";
 
 interface SettingsProps {

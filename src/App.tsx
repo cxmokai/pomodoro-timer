@@ -7,7 +7,7 @@ import { TaskInput } from "./components/TaskInput";
 import { CompletedQuests } from "./components/CompletedQuests";
 import { SettingsModal } from "./components/SettingsModal";
 import { themes } from "./utils/themes";
-import { Settings, Gamepad2 } from 'pixelarticons';
+import { Settings, Gamepad2 } from './components/icons';
 
 function App() {
   const {
