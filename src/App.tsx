@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useTimer } from './hooks/useTimer';
 import { TimerDisplay } from './components/TimerDisplay';
 import { Controls } from './components/Controls';
@@ -25,9 +25,6 @@ function App() {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [questUpdateTrigger, setQuestUpdateTrigger] = useState(0);
-  const [showPlusIndicator, setShowPlusIndicator] = useState(false);
-  const [plusCount, setPlusCount] = useState(1);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -58,35 +55,7 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [toggleTimer, resetTimer, skipMode]);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
   const theme = themes[settings.theme];
-
-  const previousSessionCount = useRef(0);
-
-  useEffect(() => {
-    if (sessionCount > previousSessionCount.current) {
-      const completed = sessionCount - previousSessionCount.current;
-      setPlusCount(completed);
-      setShowPlusIndicator(true);
-
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      timeoutRef.current = setTimeout(() => {
-        setShowPlusIndicator(false);
-      }, 2000);
-
-      previousSessionCount.current = sessionCount;
-    }
-  }, [sessionCount]);
 
   const handleQuestComplete = () => {
     setQuestUpdateTrigger((prev) => prev + 1);
@@ -104,16 +73,16 @@ function App() {
           >
             <Diamond className="w-4 h-4" />
             POMODORO
-            {showPlusIndicator && (
+            {sessionCount > 0 && (
               <span
-                className="text-sm brutal-pop no-select"
+                className="text-sm no-select"
                 style={{
                   color: '#FF6B35',
                   fontWeight: 700,
                   marginLeft: '4px',
                 }}
               >
-                +{plusCount}
+                +{sessionCount}
               </span>
             )}
           </h1>
