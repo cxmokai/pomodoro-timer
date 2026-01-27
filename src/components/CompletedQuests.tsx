@@ -18,10 +18,6 @@ export const CompletedQuests = ({
   const [expandState, setExpandState] = useState<ExpandState>('collapsed');
   const theme = themes[currentTheme];
 
-  useEffect(() => {
-    loadQuests();
-  }, [triggerUpdate]);
-
   const loadQuests = () => {
     const existing = localStorage.getItem('pomodoro-completed-quests');
     if (existing) {
@@ -29,6 +25,11 @@ export const CompletedQuests = ({
       setQuests(parsed);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadQuests();
+  }, [triggerUpdate]);
 
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);

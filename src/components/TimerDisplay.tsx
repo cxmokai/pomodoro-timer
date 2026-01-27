@@ -9,6 +9,34 @@ interface TimerDisplayProps {
   isRunning: boolean;
 }
 
+interface DigitProps {
+  value: number;
+  theme: (typeof themes)[keyof typeof themes];
+}
+
+const Digit = ({ value, theme }: DigitProps) => {
+  const digits = value.toString().padStart(2, '0');
+  return (
+    <div className="flex gap-2">
+      {digits.split('').map((digit, i) => (
+        <div
+          key={i}
+          className={`w-14 h-18 flex items-center justify-center text-4xl no-select ${theme.text}`}
+          style={{
+            background: theme.surfaceHighlight
+              .replace('bg-[', '')
+              .replace(']', ''),
+            border: `4px solid #000000`,
+            boxShadow: `2px 2px 0 0 #000000`,
+          }}
+        >
+          {digit}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export const TimerDisplay = ({
   timeLeft,
   initialDuration,
@@ -21,29 +49,6 @@ export const TimerDisplay = ({
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
-
-  const Digit = ({ value }: { value: number }) => {
-    const digits = value.toString().padStart(2, '0');
-    return (
-      <div className="flex gap-2">
-        {digits.split('').map((digit, i) => (
-          <div
-            key={i}
-            className={`w-14 h-18 flex items-center justify-center text-4xl no-select ${theme.text}`}
-            style={{
-              background: theme.surfaceHighlight
-                .replace('bg-[', '')
-                .replace(']', ''),
-              border: `4px solid #000000`,
-              boxShadow: `2px 2px 0 0 #000000`,
-            }}
-          >
-            {digit}
-          </div>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -68,13 +73,13 @@ export const TimerDisplay = ({
 
       {/* Time Display */}
       <div className="flex items-center gap-4">
-        <Digit value={minutes} />
+        <Digit value={minutes} theme={theme} />
         <div
           className={`text-4xl ${theme.text} ${isRunning ? 'brutal-blink' : ''}`}
         >
           :
         </div>
-        <Digit value={seconds} />
+        <Digit value={seconds} theme={theme} />
       </div>
 
       {/* Mode indicator as badge */}

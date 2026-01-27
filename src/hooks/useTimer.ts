@@ -56,6 +56,7 @@ export const useTimer = () => {
 
   useEffect(() => {
     const duration = getModeDuration(mode);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeLeft(duration);
     setInitialDuration(duration);
   }, [mode, getModeDuration]);
@@ -73,7 +74,7 @@ export const useTimer = () => {
     const duration = getModeDuration(mode);
     setTimeLeft(duration);
     setInitialDuration(duration);
-  }, [mode, settings, getModeDuration]);
+  }, [mode, getModeDuration]);
 
   const toggleTimer = useCallback(() => {
     if (isRunning) {
@@ -116,7 +117,7 @@ export const useTimer = () => {
       setTimeLeft(duration);
       setInitialDuration(duration);
     },
-    [settings, getModeDuration]
+    [getModeDuration]
   );
 
   useEffect(() => {
@@ -125,6 +126,7 @@ export const useTimer = () => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
     } else if (isRunning && timeLeft === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsRunning(false);
 
       if (settings.soundEnabled) {
