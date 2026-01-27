@@ -19,18 +19,6 @@ export interface ModeColors {
   color: string
 }
 
-// Terminal Hacker palette
-const terminalPalette = {
-  bg: '#0a0a0a',
-  surface: '#111111',
-  green: '#00ff41',
-  greenDark: '#008f11',
-  greenMuted: '#4a664a',
-  text: '#00ff41',
-  textMuted: '#3d5c3d',
-  border: '#333333',
-}
-
 export const themes: Record<string, Theme> = {
   zedDark: {
     name: 'Zed Dark',
@@ -95,32 +83,32 @@ export const themes: Record<string, Theme> = {
   terminal: {
     name: 'Terminal',
     bg: 'bg-[#0a0a0a]',
-    text: 'text-[#00ff41]',
-    textMuted: 'text-[#3d5c3d]',
-    accent: '#00ff41',
-    accentHover: 'hover:text-[#008f11]',
-    border: 'border-[#333333]',
-    input: 'bg-[#0a0a0a] border-[#333333] text-[#00ff41] placeholder:text-[#3d5c3d]',
-    ring: '#00ff41',
-    button: 'bg-[#111111] hover:bg-[#008f11] text-[#00ff41] border-[#333333]',
-    buttonPrimary: 'bg-[#00ff41] hover:bg-[#008f11] text-[#0a0a0a] border-[#00ff41]',
-    buttonSecondary: 'bg-[#111111] hover:bg-[#008f11] text-[#00ff41] border-[#333333]',
-    modal: 'bg-[#111111] border-[#333333]',
+    text: 'text-[#00ff00]',
+    textMuted: 'text-[#008f00]',
+    accent: '#00ff00',
+    accentHover: 'hover:text-[#00ff00]',
+    border: 'border-[#003b00]',
+    input: 'bg-[#0a0a0a] border-[#003b00] text-[#00ff00] placeholder:text-[#008f00]',
+    ring: '#00ff00',
+    button: 'bg-[#0a0a0a] hover:bg-[#001a00] text-[#00ff00] border-[#003b00]',
+    buttonPrimary: 'bg-[#00ff00] hover:bg-[#00cc00] text-[#0a0a0a] border-[#00ff00]',
+    buttonSecondary: 'bg-[#003b00] hover:bg-[#005500] text-[#00ff00] border-[#00ff00]',
+    modal: 'bg-[#0a0a0a] border-[#003b00]',
   },
 }
 
 export const modeColors: Record<string, ModeColors> = {
   work: {
-    name: 'WORK MODE',
-    color: '#00ff41',
+    name: 'Work',
+    color: '#00ff00',
   },
   shortBreak: {
-    name: 'SHORT BREAK',
-    color: '#00cc33',
+    name: 'Short Break',
+    color: '#00ff00',
   },
   longBreak: {
-    name: 'LONG BREAK',
-    color: '#009926',
+    name: 'Long Break',
+    color: '#00ff00',
   },
 }
 
