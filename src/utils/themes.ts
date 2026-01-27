@@ -14,9 +14,23 @@ export interface Theme {
   modal: string
 }
 
+const terminalPalette = {
+  bg: '#0a0a0a',        // Deep black
+  surface: '#111111',   // Slightly lighter black for panels
+  surfaceHighlight: '#1a1a1a',  // Highlight surface
+  green: '#00ff41',     // Matrix green - primary
+  greenDark: '#008f11', // Darker green - hover
+  greenMuted: '#4a664a', // Dimmed green
+  text: '#00ff41',      // Primary text in green
+  textMuted: '#3d5c3d', // Subdued green for labels
+  border: '#333333',    // Subtle gray borders
+  shadow: '#050505',    // Shadow color
+}
+
 export interface ModeColors {
   name: string
   color: string
+  bg: string
 }
 
 export const themes: Record<string, Theme> = {
@@ -82,33 +96,36 @@ export const themes: Record<string, Theme> = {
   },
   terminal: {
     name: 'Terminal',
-    bg: 'bg-[#0a0a0a]',
-    text: 'text-[#00ff00]',
-    textMuted: 'text-[#008f00]',
-    accent: '#00ff00',
-    accentHover: 'hover:text-[#00ff00]',
-    border: 'border-[#003b00]',
-    input: 'bg-[#0a0a0a] border-[#003b00] text-[#00ff00] placeholder:text-[#008f00]',
-    ring: '#00ff00',
-    button: 'bg-[#0a0a0a] hover:bg-[#001a00] text-[#00ff00] border-[#003b00]',
-    buttonPrimary: 'bg-[#00ff00] hover:bg-[#00cc00] text-[#0a0a0a] border-[#00ff00]',
-    buttonSecondary: 'bg-[#003b00] hover:bg-[#005500] text-[#00ff00] border-[#00ff00]',
-    modal: 'bg-[#0a0a0a] border-[#003b00]',
+    bg: `bg-[${terminalPalette.bg}]`,
+    text: `text-[${terminalPalette.text}]`,
+    textMuted: `text-[${terminalPalette.textMuted}]`,
+    accent: terminalPalette.green,
+    accentHover: `hover:text-[${terminalPalette.greenDark}]`,
+    border: `border-[${terminalPalette.border}]`,
+    input: `bg-[${terminalPalette.surface}] border-[${terminalPalette.border}] text-[${terminalPalette.text}] placeholder:text-[${terminalPalette.textMuted}]`,
+    ring: terminalPalette.green,
+    button: `bg-[${terminalPalette.surface}] hover:bg-[${terminalPalette.surfaceHighlight}] text-[${terminalPalette.text}] border-[${terminalPalette.border}]`,
+    buttonPrimary: `bg-[${terminalPalette.green}] hover:bg-[${terminalPalette.greenDark}] text-[${terminalPalette.bg}] border-[${terminalPalette.green}]`,
+    buttonSecondary: `bg-[${terminalPalette.surfaceHighlight}] hover:bg-[${terminalPalette.greenMuted}] text-[${terminalPalette.text}] border-[${terminalPalette.border}]`,
+    modal: `bg-[${terminalPalette.surface}] border-[${terminalPalette.border}]`,
   },
 }
 
 export const modeColors: Record<string, ModeColors> = {
   work: {
-    name: 'Work',
-    color: '#00ff00',
+    name: 'WORK MODE',
+    color: '#00ff41',
+    bg: 'bg-[#00ff41]',
   },
   shortBreak: {
-    name: 'Short Break',
-    color: '#00ff00',
+    name: 'SHORT BREAK',
+    color: '#00cc33',
+    bg: 'bg-[#00cc33]',
   },
   longBreak: {
-    name: 'Long Break',
-    color: '#00ff00',
+    name: 'LONG BREAK',
+    color: '#009926',
+    bg: 'bg-[#009926]',
   },
 }
 
