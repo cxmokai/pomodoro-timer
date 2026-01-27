@@ -4,9 +4,10 @@ import { TimerDisplay } from "./components/TimerDisplay";
 import { Controls } from "./components/Controls";
 import { ModeIndicator } from "./components/ModeIndicator";
 import { TaskInput } from "./components/TaskInput";
+import { CompletedQuests } from "./components/CompletedQuests";
 import { SettingsModal } from "./components/SettingsModal";
-import { Settings2, SkipForward } from "lucide-react";
 import { themes } from "./utils/themes";
+import { Settings, Gamepad2 } from 'pixelarticons';
 
 function App() {
   const {
@@ -23,6 +24,7 @@ function App() {
   } = useTimer();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [questUpdateTrigger, setQuestUpdateTrigger] = useState(0);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -46,80 +48,85 @@ function App() {
         case "escape":
           setIsSettingsOpen(false);
           break;
-        case "1":
-          updateSettings({ theme: "zedDark" });
-          break;
-        case "2":
-          updateSettings({ theme: "zedLight" });
-          break;
-        case "3":
-          updateSettings({ theme: "midnight" });
-          break;
-        case "4":
-          updateSettings({ theme: "forest" });
-          break;
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [toggleTimer, resetTimer, skipMode, updateSettings]);
+  }, [toggleTimer, resetTimer, skipMode]);
 
   const theme = themes[settings.theme];
 
+  const handleQuestComplete = () => {
+    setQuestUpdateTrigger(prev => prev + 1);
+  };
+
   return (
-    <div
-      className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${theme.bg}`}
-    >
-      <div className="container mx-auto px-4 py-6 max-w-2xl">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className={`text-3xl font-bold ${theme.text}`}>Pomodoro Timer</h1>
+    <div className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${theme.bg} scanlines pixel-grid crt-vignette`}>
+      <div className="container mx-auto px-4 py-6 max-w-2xl pixel-slide-in">
+        {/* Header */}
+        <header className="flex justify-between items-center mb-12">
+          <h1 className={`text-xl tracking-tight ${theme.text} pixel-no-select terminal-glow`}>
+            ◆ POMODORO
+          </h1>
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className={`p-3 rounded-lg hover:bg-white/10 transition-colors cursor-pointer ${theme.textMuted}`}
+            className={`pixel-btn text-[10px] px-3 py-2 border-4 cursor-pointer flex items-center gap-2 ${theme.border} ${theme.surface} hover:opacity-80 transition-opacity pixel-no-select`}
           >
-            <Settings2 size={24} />
+            <Settings size={14} />
+            <span>SETTINGS</span>
           </button>
-        </div>
+        </header>
 
-        <div className="flex flex-col items-center">
+        {/* Main Timer Card */}
+        <div className={`p-8 mb-8 border-4 ${theme.border} ${theme.surface} ${theme.shadow}`}>
           <ModeIndicator mode={mode} currentTheme={settings.theme} />
 
-          <TimerDisplay
-            timeLeft={timeLeft}
-            initialDuration={initialDuration}
-            mode={mode}
-            currentTheme={settings.theme}
-          />
-
-          <div className="mt-8 flex gap-4">
-            <Controls
-              isRunning={isRunning}
-              onToggle={toggleTimer}
-              onReset={resetTimer}
+          <div className="flex justify-center my-8">
+            <TimerDisplay
+              timeLeft={timeLeft}
+              initialDuration={initialDuration}
+              mode={mode}
               currentTheme={settings.theme}
             />
-            <button
-              onClick={skipMode}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer ${theme.button}`}
-              title="Skip to next mode"
-            >
-              <SkipForward size={20} />
-              Skip
-            </button>
           </div>
 
-          <div className="mt-8 w-full max-w-md">
-            <TaskInput currentTheme={settings.theme} />
-          </div>
-
-          <div className={`mt-8 text-center ${theme.textMuted}`}>
-            <p className="text-sm">
-              Completed {sessionCount} work session
-              {sessionCount !== 1 ? "s" : ""}
-            </p>
-          </div>
+          <Controls
+            isRunning={isRunning}
+            onToggle={toggleTimer}
+            onReset={resetTimer}
+            onSkip={skipMode}
+            currentTheme={settings.theme}
+          />
         </div>
+
+        {/* Task Input */}
+        <div className={`p-5 border-4 ${theme.border} ${theme.surface} ${theme.shadow} mb-6`}>
+          <div className={`flex items-center gap-2 mb-3 ${theme.textMuted} pixel-no-select`}>
+            <span className="text-xl">⚔</span>
+            <span className="text-[10px]">CURRENT QUEST</span>
+          </div>
+          <TaskInput
+            currentTheme={settings.theme}
+            onQuestComplete={handleQuestComplete}
+          />
+        </div>
+
+        {/* Completed Quests */}
+        <CompletedQuests
+          currentTheme={settings.theme}
+          triggerUpdate={questUpdateTrigger}
+        />
+
+        {/* Stats Footer */}
+        <footer className="flex justify-between items-center mt-6">
+          <div className={`flex items-center gap-2 ${theme.textMuted} pixel-no-select`}>
+            <Gamepad2 size={18} />
+            <span className="text-[10px]">
+              SESSIONS: <span className={`${theme.text} terminal-glow`}>{sessionCount}</span>
+            </span>
+          </div>
+        </footer>
       </div>
 
       <SettingsModal
