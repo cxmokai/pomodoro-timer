@@ -103,7 +103,7 @@ export const SettingsModal = ({
               />
             </div>
             <div>
-              <label className={`block text-[10px] mb-2 ${theme.text terminal-glow} pixel-no-select`}>
+              <label className={`block text-[10px] mb-2 ${theme.text} pixel-no-select`}>
                 SHORT BREAK (min)
               </label>
               <input
@@ -125,7 +125,7 @@ export const SettingsModal = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={`block text-[10px] mb-2 ${theme.text terminal-glow} pixel-no-select`}>
+              <label className={`block text-[10px] mb-2 ${theme.text} pixel-no-select`}>
                 LONG BREAK (min)
               </label>
               <input
@@ -144,7 +144,7 @@ export const SettingsModal = ({
               />
             </div>
             <div>
-              <label className={`block text-[10px] mb-2 ${theme.text terminal-glow} pixel-no-select`}>
+              <label className={`block text-[10px] mb-2 ${theme.text} pixel-no-select`}>
                 INTERVAL
               </label>
               <input
@@ -184,7 +184,7 @@ export const SettingsModal = ({
 
           {/* Keyboard Shortcuts */}
           <div className={`p-4 border-4 ${theme.border} ${theme.bg}`}>
-            <h3 className={`text-[10px] mb-3 ${theme.text terminal-glow} pixel-no-select`}>CONTROLS</h3>
+            <h3 className={`text-[10px] mb-3 ${theme.text} pixel-no-select`}>CONTROLS</h3>
             <div className="grid grid-cols-2 gap-3">
               {shortcuts.map((shortcut) => (
                 <div key={shortcut.key} className="flex justify-between items-center">
@@ -196,7 +196,7 @@ export const SettingsModal = ({
                   >
                     {shortcut.key}
                   </kbd>
-                  <span className={`text-[9px] ${theme.text terminal-glow} pixel-no-select`}>
+                  <span className={`text-[9px] ${theme.text} pixel-no-select`}>
                     {shortcut.action}
                   </span>
                 </div>
