@@ -1,20 +1,61 @@
-import { useState } from "react";
-import { Edit3 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Target, Check } from "pixelarticons";
 import { themes } from "../utils/themes";
+import type { CompletedQuest } from "../utils/themes";
 
 interface TaskInputProps {
   currentTheme: string;
+  onQuestComplete?: (quest: CompletedQuest) => void;
 }
 
-export const TaskInput = ({ currentTheme }: TaskInputProps) => {
-  const [task, setTask] = useState("");
+export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => {
+  const [task, setTask] = useState(() => {
+    return localStorage.getItem("pomodoro-task") || "";
+  });
   const [isEditing, setIsEditing] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const theme = themes[currentTheme];
 
+  useEffect(() => {
+    localStorage.setItem("pomodoro-task", task);
+  }, [task]);
+
+  const handleComplete = () => {
+    if (!task.trim()) return;
+
+    setIsCompleted(true);
+
+    // Save to completed quests
+    const completedQuest: CompletedQuest = {
+      id: Date.now().toString(),
+      title: task,
+      completedAt: Date.now(),
+    };
+
+    // Get existing completed quests
+    const existing = localStorage.getItem("pomodoro-completed-quests");
+    const completedQuests: CompletedQuest[] = existing ? JSON.parse(existing) : [];
+    completedQuests.unshift(completedQuest);
+
+    // Keep only last 50 quests
+    const trimmed = completedQuests.slice(0, 50);
+    localStorage.setItem("pomodoro-completed-quests", JSON.stringify(trimmed));
+
+    // Notify parent
+    onQuestComplete?.(completedQuest);
+
+    // Clear after animation
+    setTimeout(() => {
+      setTask("");
+      setIsCompleted(false);
+      localStorage.removeItem("pomodoro-task");
+    }, 1500);
+  };
+
   return (
-    <div className="mb-8">
-      {isEditing ? (
-        <div className="flex gap-2">
+    <div className="flex items-center gap-3">
+      <div className="flex-1">
+        {isEditing ? (
           <input
             type="text"
             value={task}
@@ -25,24 +66,57 @@ export const TaskInput = ({ currentTheme }: TaskInputProps) => {
                 setIsEditing(false);
               }
             }}
-            placeholder="Enter current task..."
-            className={`flex-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 ${theme.input}`}
+            placeholder="Enter your quest..."
+            className={`w-full px-4 py-3 text-[10px] border-4 ${theme.input} pixel-input pixel-no-select`}
+            style={{
+              fontFamily: "'Press Start 2P', cursive",
+              boxShadow: `inset 2px 2px 0 0 rgba(0,0,0,0.15)`,
+            }}
             autoFocus
           />
-        </div>
-      ) : (
-        <div
-          onClick={() => setIsEditing(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer hover:bg-white/5 transition-colors group"
+        ) : (
+          <div
+            onClick={() => !isCompleted && setIsEditing(true)}
+            className={`w-full px-4 py-3 border-4 cursor-pointer transition-all duration-100 pixel-btn pixel-btn-hover pixel-cursor-pointer flex items-center gap-2 ${
+              task ? theme.surfaceHighlight : theme.bg
+            } ${theme.border} ${isCompleted ? 'opacity-50' : ''}`}
+            style={{
+              boxShadow: task
+                ? `2px 2px 0 0 rgba(0,0,0,0.15)`
+                : `inset 2px 2px 0 0 rgba(0,0,0,0.1)`,
+            }}
+          >
+            <Target size={16} className={task ? theme.text : theme.textMuted} />
+            <span
+              className={task ? theme.text : `${theme.textMuted} italic`}
+              style={{
+                textDecoration: isCompleted ? 'line-through' : 'none',
+              }}
+            >
+              {task || "Click to add quest..."}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Complete button - only show when there's a task */}
+      {task && !isEditing && (
+        <button
+          onClick={handleComplete}
+          disabled={isCompleted}
+          className={`pixel-btn px-5 py-3 border-4 flex items-center justify-center cursor-pointer transition-all duration-100 pixel-no-select ${
+            isCompleted
+              ? 'bg-[#00ff88] border-[#00cc6a] text-[#0d0221]'
+              : theme.buttonPrimary
+          }`}
+          style={{
+            boxShadow: isCompleted
+              ? '2px 2px 0 0 rgba(0,0,0,0.2)'
+              : '4px 4px 0 0 rgba(0,0,0,0.2)',
+          }}
         >
-          <Edit3
-            size={16}
-            className={`opacity-0 group-hover:opacity-100 transition-opacity ${theme.textMuted}`}
-          />
-          <span className={task ? theme.text : `${theme.textMuted} italic`}>
-            {task || "Click to add a task"}
-          </span>
-        </div>
+          <Check size={18} />
+        </button>
       )}
     </div>
   );
