@@ -80,7 +80,7 @@ export const SettingsModal = ({
         </div>
 
         {/* Content */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className={`p-8 space-y-6 max-h-[70vh] overflow-y-auto ${theme.surface}`}>
           {/* Duration Settings */}
           <div className="grid grid-cols-2 gap-4">
             <div>
