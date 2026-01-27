@@ -17,5 +17,5 @@ export {
   Trash2,
   Volume2,
   VolumeX,
-  X
-} from 'lucide-react'
+  X,
+} from 'lucide-react';

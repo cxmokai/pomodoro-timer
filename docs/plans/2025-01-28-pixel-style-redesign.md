@@ -13,6 +13,7 @@
 ## Task 1: Install pixelarticons dependency
 
 **Files:**
+
 - Modify: `package.json` (via npm command)
 
 **Step 1: Install pixelarticons package**
@@ -43,6 +44,7 @@ git commit -m "feat: add pixelarticons dependency"
 ## Task 2: Create new terminal theme in themes.ts
 
 **Files:**
+
 - Modify: `src/utils/themes.ts`
 
 **Step 1: Add terminal color palette**
@@ -52,17 +54,17 @@ After the existing `neonPalette`, add:
 ```typescript
 // Terminal Hacker palette
 const terminalPalette = {
-  bg: '#0a0a0a',        // Deep black
-  surface: '#111111',   // Slightly lighter black for panels
-  surfaceHighlight: '#1a1a1a',  // Highlight surface
-  green: '#00ff41',     // Matrix green - primary
+  bg: '#0a0a0a', // Deep black
+  surface: '#111111', // Slightly lighter black for panels
+  surfaceHighlight: '#1a1a1a', // Highlight surface
+  green: '#00ff41', // Matrix green - primary
   greenDark: '#008f11', // Darker green - hover
   greenMuted: '#4a664a', // Dimmed green
-  text: '#00ff41',      // Primary text in green
+  text: '#00ff41', // Primary text in green
   textMuted: '#3d5c3d', // Subdued green for labels
-  border: '#333333',    // Subtle gray borders
-  shadow: '#050505',    // Shadow color
-}
+  border: '#333333', // Subtle gray borders
+  shadow: '#050505', // Shadow color
+};
 ```
 
 **Step 2: Add terminal theme to themes export**
@@ -98,23 +100,26 @@ terminal: {
 Replace `modeColors` with terminal-friendly colors:
 
 ```typescript
-export const modeColors: Record<string, { name: string; color: string; bg: string }> = {
+export const modeColors: Record<
+  string,
+  { name: string; color: string; bg: string }
+> = {
   work: {
     name: 'WORK MODE',
-    color: '#00ff41',  // Green for focus work
+    color: '#00ff41', // Green for focus work
     bg: 'bg-[#00ff41]',
   },
   shortBreak: {
     name: 'SHORT BREAK',
-    color: '#00cc33',  // Slightly dimmed green
+    color: '#00cc33', // Slightly dimmed green
     bg: 'bg-[#00cc33]',
   },
   longBreak: {
     name: 'LONG BREAK',
-    color: '#009926',  // Even more dimmed
+    color: '#009926', // Even more dimmed
     bg: 'bg-[#009926]',
   },
-}
+};
 ```
 
 **Step 4: Update defaultSettings theme**
@@ -126,8 +131,8 @@ export const defaultSettings: Settings = {
   longBreakDuration: 15,
   longBreakInterval: 4,
   soundEnabled: true,
-  theme: 'terminal',  // Changed from 'neon'
-}
+  theme: 'terminal', // Changed from 'neon'
+};
 ```
 
 **Step 5: Commit**
@@ -142,6 +147,7 @@ git commit -m "feat: add terminal hacker theme"
 ## Task 3: Update index.css with terminal CRT effects
 
 **Files:**
+
 - Modify: `src/index.css`
 
 **Step 1: Update pixel grid background for terminal**
@@ -151,17 +157,17 @@ Replace `.pixel-grid` and `.pixel-grid-dark` with:
 ```css
 /* ========== Terminal Grid Background ========== */
 .pixel-grid {
-    background-image:
-        linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
-    background-size: 8px 8px;
+  background-image:
+    linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
+  background-size: 8px 8px;
 }
 
 .pixel-grid-dark {
-    background-image:
-        linear-gradient(rgba(0, 255, 65, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.015) 1px, transparent 1px);
-    background-size: 8px 8px;
+  background-image:
+    linear-gradient(rgba(0, 255, 65, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.015) 1px, transparent 1px);
+  background-size: 8px 8px;
 }
 ```
 
@@ -172,21 +178,21 @@ Replace `.scanlines::before` with:
 ```css
 /* Terminal Scanline effect */
 .scanlines::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.08),
-        rgba(0, 0, 0, 0.08) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    pointer-events: none;
-    z-index: 9999;
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.08),
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
 ```
 
@@ -197,20 +203,23 @@ Add after CRT effects section:
 ```css
 /* ========== Terminal Glow Effects ========== */
 .terminal-glow {
-    text-shadow: 0 0 5px rgba(0, 255, 65, 0.5),
-                 0 0 10px rgba(0, 255, 65, 0.3),
-                 0 0 20px rgba(0, 255, 65, 0.1);
+  text-shadow:
+    0 0 5px rgba(0, 255, 65, 0.5),
+    0 0 10px rgba(0, 255, 65, 0.3),
+    0 0 20px rgba(0, 255, 65, 0.1);
 }
 
 .terminal-glow-box {
-    box-shadow: 0 0 5px rgba(0, 255, 65, 0.3),
-                0 0 10px rgba(0, 255, 65, 0.2),
-                inset 0 0 20px rgba(0, 255, 65, 0.05);
+  box-shadow:
+    0 0 5px rgba(0, 255, 65, 0.3),
+    0 0 10px rgba(0, 255, 65, 0.2),
+    inset 0 0 20px rgba(0, 255, 65, 0.05);
 }
 
 .terminal-border-glow {
-    box-shadow: 0 0 3px rgba(0, 255, 65, 0.4),
-                inset 0 0 3px rgba(0, 255, 65, 0.1);
+  box-shadow:
+    0 0 3px rgba(0, 255, 65, 0.4),
+    inset 0 0 3px rgba(0, 255, 65, 0.1);
 }
 ```
 
@@ -221,27 +230,27 @@ Replace scrollbar styles with:
 ```css
 /* ========== Terminal Scrollbar ========== */
 ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #0a0a0a;
-    border: 2px solid #333333;
+  background: #0a0a0a;
+  border: 2px solid #333333;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #00ff41;
-    border: 2px solid #333333;
+  background: #00ff41;
+  border: 2px solid #333333;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #00cc33;
+  background: #00cc33;
 }
 
 ::-webkit-scrollbar-corner {
-    background: #0a0a0a;
-    border: 2px solid #333333;
+  background: #0a0a0a;
+  border: 2px solid #333333;
 }
 ```
 
@@ -250,8 +259,8 @@ Replace scrollbar styles with:
 ```css
 /* ========== Terminal Selection ========== */
 ::selection {
-    background: #00ff41;
-    color: #0a0a0a;
+  background: #00ff41;
+  color: #0a0a0a;
 }
 ```
 
@@ -260,12 +269,12 @@ Replace scrollbar styles with:
 ```css
 /* ========== Terminal Input Focus ========== */
 .pixel-input:focus {
-    outline: none;
-    border-color: #00ff41;
-    box-shadow:
-        0 0 0 2px rgba(0, 255, 65, 0.2),
-        0 0 10px rgba(0, 255, 65, 0.1),
-        inset 0 0 10px rgba(0, 255, 65, 0.05);
+  outline: none;
+  border-color: #00ff41;
+  box-shadow:
+    0 0 0 2px rgba(0, 255, 65, 0.2),
+    0 0 10px rgba(0, 255, 65, 0.1),
+    inset 0 0 10px rgba(0, 255, 65, 0.05);
 }
 ```
 
@@ -281,6 +290,7 @@ git commit -m "style: add terminal CRT effects and glow"
 ## Task 4: Update Controls component with pixel icons
 
 **Files:**
+
 - Modify: `src/components/Controls.tsx`
 
 **Step 1: Import pixel icons**
@@ -352,6 +362,7 @@ git commit -m "feat: replace emoji with pixel icons in Controls"
 ## Task 5: Update App.tsx header and footer with pixel icons
 
 **Files:**
+
 - Modify: `src/App.tsx`
 
 **Step 1: Import pixel icons**
@@ -407,6 +418,7 @@ git commit -m "feat: replace emoji with pixel icons in header and footer"
 ## Task 6: Update TaskInput component with pixel icons
 
 **Files:**
+
 - Modify: `src/components/TaskInput.tsx`
 
 **Step 1: Read the current file**
@@ -453,6 +465,7 @@ git commit -m "feat: replace emoji with pixel icons in TaskInput"
 ## Task 7: Update CompletedQuests component with pixel icons
 
 **Files:**
+
 - Modify: `src/components/CompletedQuests.tsx`
 
 **Step 1: Read the current file**
@@ -470,6 +483,7 @@ import { Trash2, CheckCircle } from 'pixelarticons';
 **Step 3: Replace any emoji icons**
 
 Replace any emoji with corresponding pixel icons:
+
 - `🗑` → `<Trash2 size={14} />`
 - `✓` → `<CheckCircle size={14} />`
 
@@ -485,6 +499,7 @@ git commit -m "feat: replace emoji with pixel icons in CompletedQuests"
 ## Task 8: Update SettingsModal component with pixel icons
 
 **Files:**
+
 - Modify: `src/components/SettingsModal.tsx`
 
 **Step 1: Read the current file**
@@ -523,6 +538,7 @@ git commit -m "feat: replace emoji with pixel icons in SettingsModal"
 ## Task 9: Update TimerDisplay with terminal styling
 
 **Files:**
+
 - Modify: `src/components/TimerDisplay.tsx`
 
 **Step 1: Update progress bar styling**
@@ -584,6 +600,7 @@ git commit -m "style: update TimerDisplay with terminal styling"
 ## Task 10: Update ModeIndicator component
 
 **Files:**
+
 - Modify: `src/components/ModeIndicator.tsx`
 
 **Step 1: Read current file**
@@ -608,6 +625,7 @@ git commit -m "style: update ModeIndicator with terminal styling"
 ## Task 11: Test the complete redesign
 
 **Files:**
+
 - No file modifications
 
 **Step 1: Start dev server**
@@ -619,6 +637,7 @@ npm run dev
 **Step 2: Verify all elements**
 
 Check:
+
 - [ ] Terminal green theme is applied
 - [ ] Scanlines effect is visible
 - [ ] All icons are pixel style (no emoji)
@@ -656,6 +675,7 @@ git commit -m "fix: minor tweaks after testing"
 ## Task 12: Update documentation (optional)
 
 **Files:**
+
 - Create: `README.md` (if doesn't exist) or Modify: `README.md`
 
 **Step 1: Document the new terminal theme**

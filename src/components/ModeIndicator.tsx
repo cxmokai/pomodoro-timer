@@ -1,28 +1,32 @@
-import { type TimerMode } from '../hooks/useTimer'
-import { themes, modeColors } from '../utils/themes'
+import { type TimerMode } from '../hooks/useTimer';
+import { themes, modeColors } from '../utils/themes';
 
 interface ModeIndicatorProps {
-  mode: TimerMode
-  currentTheme: string
+  mode: TimerMode;
+  currentTheme: string;
 }
 
 export const ModeIndicator = ({ mode, currentTheme }: ModeIndicatorProps) => {
-  const theme = themes[currentTheme]
+  const theme = themes[currentTheme];
 
   const getModeLabel = (m: string) => {
     switch (m) {
-      case 'work': return 'WORK'
-      case 'shortBreak': return 'SHORT'
-      case 'longBreak': return 'LONG'
-      default: return ''
+      case 'work':
+        return 'WORK';
+      case 'shortBreak':
+        return 'SHORT';
+      case 'longBreak':
+        return 'LONG';
+      default:
+        return '';
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center gap-3 mb-6">
       {['work', 'shortBreak', 'longBreak'].map((m) => {
-        const isActive = m === mode
-        const activeColor = modeColors[m as keyof typeof modeColors].color
+        const isActive = m === mode;
+        const activeColor = modeColors[m as keyof typeof modeColors].color;
         return (
           <div key={m} className="flex items-center gap-2">
             {/* LED indicator */}
@@ -46,8 +50,8 @@ export const ModeIndicator = ({ mode, currentTheme }: ModeIndicatorProps) => {
               </span>
             )}
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};

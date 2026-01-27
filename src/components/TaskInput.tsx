@@ -1,23 +1,26 @@
-import { useState, useEffect } from "react";
-import { Check } from "./icons";
-import { themes } from "../utils/themes";
-import type { CompletedQuest } from "../utils/themes";
+import { useState, useEffect } from 'react';
+import { Check } from './icons';
+import { themes } from '../utils/themes';
+import type { CompletedQuest } from '../utils/themes';
 
 interface TaskInputProps {
   currentTheme: string;
   onQuestComplete?: (quest: CompletedQuest) => void;
 }
 
-export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => {
+export const TaskInput = ({
+  currentTheme,
+  onQuestComplete,
+}: TaskInputProps) => {
   const [task, setTask] = useState(() => {
-    return localStorage.getItem("pomodoro-task") || "";
+    return localStorage.getItem('pomodoro-task') || '';
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const theme = themes[currentTheme];
 
   useEffect(() => {
-    localStorage.setItem("pomodoro-task", task);
+    localStorage.setItem('pomodoro-task', task);
   }, [task]);
 
   const handleComplete = () => {
@@ -33,22 +36,24 @@ export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => 
     };
 
     // Get existing completed quests
-    const existing = localStorage.getItem("pomodoro-completed-quests");
-    const completedQuests: CompletedQuest[] = existing ? JSON.parse(existing) : [];
+    const existing = localStorage.getItem('pomodoro-completed-quests');
+    const completedQuests: CompletedQuest[] = existing
+      ? JSON.parse(existing)
+      : [];
     completedQuests.unshift(completedQuest);
 
     // Keep only last 50 quests
     const trimmed = completedQuests.slice(0, 50);
-    localStorage.setItem("pomodoro-completed-quests", JSON.stringify(trimmed));
+    localStorage.setItem('pomodoro-completed-quests', JSON.stringify(trimmed));
 
     // Notify parent
     onQuestComplete?.(completedQuest);
 
     // Clear after animation
     setTimeout(() => {
-      setTask("");
+      setTask('');
       setIsCompleted(false);
-      localStorage.removeItem("pomodoro-task");
+      localStorage.removeItem('pomodoro-task');
     }, 1500);
   };
 
@@ -62,7 +67,7 @@ export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => 
             onChange={(e) => setTask(e.target.value)}
             onBlur={() => setIsEditing(false)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === 'Enter') {
                 setIsEditing(false);
               }
             }}
@@ -94,7 +99,7 @@ export const TaskInput = ({ currentTheme, onQuestComplete }: TaskInputProps) => 
                 textDecoration: isCompleted ? 'line-through' : 'none',
               }}
             >
-              {task || "Click to add quest..."}
+              {task || 'Click to add quest...'}
             </span>
           </div>
         )}

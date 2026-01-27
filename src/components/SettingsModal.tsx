@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Volume2, VolumeX, X, Settings as SettingsIcon } from "./icons";
-import { themes, type Settings } from "../utils/themes";
+import { useState, useEffect } from 'react';
+import { Volume2, VolumeX, X, Settings as SettingsIcon } from './icons';
+import { themes, type Settings } from '../utils/themes';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ export const SettingsModal = ({
 
   const handleChange = (
     key: keyof Settings,
-    value: number | boolean | string,
+    value: number | boolean | string
   ) => {
     const newSettings = { ...localSettings, [key]: value };
     setLocalSettings(newSettings);
@@ -34,11 +34,11 @@ export const SettingsModal = ({
   };
 
   const shortcuts = [
-    { key: "SPACE / K", action: "Start/Pause" },
-    { key: "R", action: "Reset" },
-    { key: "S", action: "Skip Mode" },
-    { key: "T", action: "Settings" },
-    { key: "ESC", action: "Close" },
+    { key: 'SPACE / K', action: 'Start/Pause' },
+    { key: 'R', action: 'Reset' },
+    { key: 'S', action: 'Skip Mode' },
+    { key: 'T', action: 'Settings' },
+    { key: 'ESC', action: 'Close' },
   ];
 
   if (!isOpen) return null;
@@ -58,8 +58,17 @@ export const SettingsModal = ({
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
-          <h2 className="text-lg no-select flex items-center gap-3" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+        <div
+          className="flex items-center justify-between p-6 border-b-4"
+          style={{
+            borderColor: '#000000',
+            background: theme.bg.replace('bg-[', '').replace(']', ''),
+          }}
+        >
+          <h2
+            className="text-lg no-select flex items-center gap-3"
+            style={{ color: theme.text.replace('text-[', '').replace(']', '') }}
+          >
             <SettingsIcon className="w-5 h-5" />
             <span>SETTINGS</span>
           </h2>
@@ -67,7 +76,9 @@ export const SettingsModal = ({
             onClick={onClose}
             className="brutal-btn px-4 py-2 flex items-center justify-center cursor-pointer no-select"
             style={{
-              background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+              background: theme.surfaceHighlight
+                .replace('bg-[', '')
+                .replace(']', ''),
             }}
           >
             <X className="w-[18px] h-[18px]" />
@@ -75,11 +86,21 @@ export const SettingsModal = ({
         </div>
 
         {/* Content */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto" style={{ background: theme.surface.replace('bg-[', '').replace(']', '') }}>
+        <div
+          className="p-8 space-y-6 max-h-[70vh] overflow-y-auto"
+          style={{
+            background: theme.surface.replace('bg-[', '').replace(']', ''),
+          }}
+        >
           {/* Duration Settings */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+              <label
+                className="block text-sm mb-2 no-select"
+                style={{
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
                 WORK (min)
               </label>
               <input
@@ -88,7 +109,7 @@ export const SettingsModal = ({
                 max="60"
                 value={localSettings.workDuration}
                 onChange={(e) =>
-                  handleChange("workDuration", parseInt(e.target.value))
+                  handleChange('workDuration', parseInt(e.target.value))
                 }
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
@@ -98,7 +119,12 @@ export const SettingsModal = ({
               />
             </div>
             <div>
-              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+              <label
+                className="block text-sm mb-2 no-select"
+                style={{
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
                 SHORT BREAK (min)
               </label>
               <input
@@ -107,7 +133,7 @@ export const SettingsModal = ({
                 max="15"
                 value={localSettings.shortBreakDuration}
                 onChange={(e) =>
-                  handleChange("shortBreakDuration", parseInt(e.target.value))
+                  handleChange('shortBreakDuration', parseInt(e.target.value))
                 }
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
@@ -120,7 +146,12 @@ export const SettingsModal = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+              <label
+                className="block text-sm mb-2 no-select"
+                style={{
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
                 LONG BREAK (min)
               </label>
               <input
@@ -129,7 +160,7 @@ export const SettingsModal = ({
                 max="30"
                 value={localSettings.longBreakDuration}
                 onChange={(e) =>
-                  handleChange("longBreakDuration", parseInt(e.target.value))
+                  handleChange('longBreakDuration', parseInt(e.target.value))
                 }
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
@@ -139,7 +170,12 @@ export const SettingsModal = ({
               />
             </div>
             <div>
-              <label className="block text-sm mb-2 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+              <label
+                className="block text-sm mb-2 no-select"
+                style={{
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
                 INTERVAL
               </label>
               <input
@@ -148,7 +184,7 @@ export const SettingsModal = ({
                 max="8"
                 value={localSettings.longBreakInterval}
                 onChange={(e) =>
-                  handleChange("longBreakInterval", parseInt(e.target.value))
+                  handleChange('longBreakInterval', parseInt(e.target.value))
                 }
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
@@ -160,19 +196,40 @@ export const SettingsModal = ({
           </div>
 
           {/* Sound Toggle */}
-          <div className="p-4 border-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
+          <div
+            className="p-4 border-4"
+            style={{
+              borderColor: '#000000',
+              background: theme.bg.replace('bg-[', '').replace(']', ''),
+            }}
+          >
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-sm no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+              <span
+                className="text-sm no-select"
+                style={{
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
                 ENABLE SOUND
               </span>
               <div className="flex items-center gap-3">
-                <span style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
-                  {localSettings.soundEnabled ? <Volume2 className="w-[18px] h-[18px]" /> : <VolumeX className="w-[18px] h-[18px]" />}
+                <span
+                  style={{
+                    color: theme.text.replace('text-[', '').replace(']', ''),
+                  }}
+                >
+                  {localSettings.soundEnabled ? (
+                    <Volume2 className="w-[18px] h-[18px]" />
+                  ) : (
+                    <VolumeX className="w-[18px] h-[18px]" />
+                  )}
                 </span>
                 <input
                   type="checkbox"
                   checked={localSettings.soundEnabled}
-                  onChange={(e) => handleChange("soundEnabled", e.target.checked)}
+                  onChange={(e) =>
+                    handleChange('soundEnabled', e.target.checked)
+                  }
                   className="brutal-checkbox"
                 />
               </div>
@@ -180,21 +237,44 @@ export const SettingsModal = ({
           </div>
 
           {/* Keyboard Shortcuts */}
-          <div className="p-4 border-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
-            <h3 className="text-sm mb-3 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>CONTROLS</h3>
+          <div
+            className="p-4 border-4"
+            style={{
+              borderColor: '#000000',
+              background: theme.bg.replace('bg-[', '').replace(']', ''),
+            }}
+          >
+            <h3
+              className="text-sm mb-3 no-select"
+              style={{
+                color: theme.text.replace('text-[', '').replace(']', ''),
+              }}
+            >
+              CONTROLS
+            </h3>
             <div className="grid grid-cols-2 gap-3">
               {shortcuts.map((shortcut) => (
-                <div key={shortcut.key} className="flex justify-between items-center">
+                <div
+                  key={shortcut.key}
+                  className="flex justify-between items-center"
+                >
                   <kbd
                     className="px-3 py-2 text-xs no-select brutal-card"
                     style={{
-                      background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                      background: theme.surfaceHighlight
+                        .replace('bg-[', '')
+                        .replace(']', ''),
                       color: theme.text.replace('text-[', '').replace(']', ''),
                     }}
                   >
                     {shortcut.key}
                   </kbd>
-                  <span className="text-sm no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>
+                  <span
+                    className="text-sm no-select"
+                    style={{
+                      color: theme.text.replace('text-[', '').replace(']', ''),
+                    }}
+                  >
                     {shortcut.action}
                   </span>
                 </div>
@@ -203,8 +283,21 @@ export const SettingsModal = ({
           </div>
 
           {/* Theme Selector */}
-          <div className="p-4 border-4" style={{ borderColor: '#000000', background: theme.bg.replace('bg-[', '').replace(']', '') }}>
-            <h3 className="text-sm mb-3 no-select" style={{ color: theme.text.replace('text-[', '').replace(']', '') }}>THEME</h3>
+          <div
+            className="p-4 border-4"
+            style={{
+              borderColor: '#000000',
+              background: theme.bg.replace('bg-[', '').replace(']', ''),
+            }}
+          >
+            <h3
+              className="text-sm mb-3 no-select"
+              style={{
+                color: theme.text.replace('text-[', '').replace(']', ''),
+              }}
+            >
+              THEME
+            </h3>
             <div className="grid grid-cols-3 gap-2">
               {Object.keys(themes).map((themeName) => (
                 <button
@@ -212,8 +305,16 @@ export const SettingsModal = ({
                   onClick={() => handleChange('theme', themeName)}
                   className="px-3 py-2 text-sm brutal-btn no-select"
                   style={{
-                    background: localSettings.theme === themeName ? '#FF6B35' : theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
-                    color: localSettings.theme === themeName ? '#000000' : theme.text.replace('text-[', '').replace(']', ''),
+                    background:
+                      localSettings.theme === themeName
+                        ? '#FF6B35'
+                        : theme.surfaceHighlight
+                            .replace('bg-[', '')
+                            .replace(']', ''),
+                    color:
+                      localSettings.theme === themeName
+                        ? '#000000'
+                        : theme.text.replace('text-[', '').replace(']', ''),
                   }}
                 >
                   {themes[themeName].name.toUpperCase()}

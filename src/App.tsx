@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { useTimer } from "./hooks/useTimer";
-import { TimerDisplay } from "./components/TimerDisplay";
-import { Controls } from "./components/Controls";
-import { ModeIndicator } from "./components/ModeIndicator";
-import { TaskInput } from "./components/TaskInput";
-import { CompletedQuests } from "./components/CompletedQuests";
-import { SettingsModal } from "./components/SettingsModal";
-import { themes } from "./utils/themes";
-import { Settings, Sun, Moon, Diamond, Timer, Check } from "./components/icons";
+import { useEffect, useState } from 'react';
+import { useTimer } from './hooks/useTimer';
+import { TimerDisplay } from './components/TimerDisplay';
+import { Controls } from './components/Controls';
+import { ModeIndicator } from './components/ModeIndicator';
+import { TaskInput } from './components/TaskInput';
+import { CompletedQuests } from './components/CompletedQuests';
+import { SettingsModal } from './components/SettingsModal';
+import { themes } from './utils/themes';
+import { Settings, Sun, Moon, Diamond, Timer, Check } from './components/icons';
 
 function App() {
   const {
@@ -31,62 +31,78 @@ function App() {
       if (e.target instanceof HTMLInputElement) return;
 
       switch (e.key.toLowerCase()) {
-        case " ":
-        case "k":
+        case ' ':
+        case 'k':
           e.preventDefault();
           toggleTimer();
           break;
-        case "r":
+        case 'r':
           resetTimer();
           break;
-        case "s":
+        case 's':
           skipMode();
           break;
-        case "t":
+        case 't':
           setIsSettingsOpen((prev) => !prev);
           break;
-        case "escape":
+        case 'escape':
           setIsSettingsOpen(false);
           break;
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [toggleTimer, resetTimer, skipMode]);
 
   const theme = themes[settings.theme];
 
   const handleQuestComplete = () => {
-    setQuestUpdateTrigger(prev => prev + 1);
+    setQuestUpdateTrigger((prev) => prev + 1);
   };
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${theme.bg} brutal-fade-in`}>
+    <div
+      className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-300 ${theme.bg} brutal-fade-in`}
+    >
       <div className="container mx-auto px-4 py-6 max-w-2xl brutal-slide-in">
         {/* Header */}
         <header className="flex justify-between items-center mb-12">
-          <h1 className={`text-2xl tracking-tight ${theme.text} no-select flex items-center gap-2`}>
+          <h1
+            className={`text-2xl tracking-tight ${theme.text} no-select flex items-center gap-2`}
+          >
             <Diamond className="w-4 h-4" />
             POMODORO
           </h1>
           <div className="flex items-center gap-3">
             <button
-              onClick={() => updateSettings({ theme: settings.theme === 'dark' ? 'light' : 'dark' })}
+              onClick={() =>
+                updateSettings({
+                  theme: settings.theme === 'dark' ? 'light' : 'dark',
+                })
+              }
               className={`brutal-btn text-sm px-3 py-2 flex items-center justify-center cursor-pointer no-select`}
               style={{
-                background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                background: theme.surfaceHighlight
+                  .replace('bg-[', '')
+                  .replace(']', ''),
                 color: theme.text.replace('text-[', '').replace(']', ''),
               }}
               title={`Switch to ${settings.theme === 'dark' ? 'light' : 'dark'} theme`}
             >
-              {settings.theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {settings.theme === 'dark' ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
             </button>
             <button
               onClick={() => setIsSettingsOpen(true)}
               className={`brutal-btn text-sm px-3 py-2 flex items-center gap-2 cursor-pointer no-select`}
               style={{
-                background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                background: theme.surfaceHighlight
+                  .replace('bg-[', '')
+                  .replace(']', ''),
                 color: theme.text.replace('text-[', '').replace(']', ''),
               }}
             >
@@ -121,7 +137,9 @@ function App() {
 
         {/* Task Input */}
         <div className={`p-5 brutal-card mb-6 ${theme.surface}`}>
-          <div className={`flex items-center gap-2 mb-3 ${theme.textMuted} no-select`}>
+          <div
+            className={`flex items-center gap-2 mb-3 ${theme.textMuted} no-select`}
+          >
             <Timer className="w-5 h-5" />
             <span className="text-sm">CURRENT QUEST</span>
           </div>
@@ -139,7 +157,9 @@ function App() {
 
         {/* Stats Footer */}
         <footer className="flex justify-between items-center mt-6">
-          <div className={`flex items-center gap-2 ${theme.textMuted} no-select`}>
+          <div
+            className={`flex items-center gap-2 ${theme.textMuted} no-select`}
+          >
             <Check className="w-5 h-5" />
             <span className="text-sm">
               SESSIONS: <span className={`${theme.text}`}>{sessionCount}</span>

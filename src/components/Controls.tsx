@@ -1,4 +1,4 @@
-import { themes } from "../utils/themes";
+import { themes } from '../utils/themes';
 import { Play, Pause, RefreshCw, SkipForward } from './icons';
 
 interface ControlsProps {
@@ -53,7 +53,9 @@ export const Controls = ({
         onClick={onReset}
         className={`brutal-btn px-6 py-3 flex items-center gap-2 cursor-pointer no-select ${theme.button}`}
         style={{
-          background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+          background: theme.surfaceHighlight
+            .replace('bg-[', '')
+            .replace(']', ''),
           color: theme.text.replace('text-[', '').replace(']', ''),
         }}
       >
@@ -66,7 +68,9 @@ export const Controls = ({
         onClick={onSkip}
         className={`brutal-btn px-6 py-3 flex items-center gap-2 cursor-pointer no-select ${theme.button}`}
         style={{
-          background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+          background: theme.surfaceHighlight
+            .replace('bg-[', '')
+            .replace(']', ''),
           color: theme.text.replace('text-[', '').replace(']', ''),
         }}
       >

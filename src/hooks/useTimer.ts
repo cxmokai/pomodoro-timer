@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { defaultSettings, type Settings, themes } from "../utils/themes";
-import { playNotificationSound } from "../utils/sounds";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { defaultSettings, type Settings, themes } from '../utils/themes';
+import { playNotificationSound } from '../utils/sounds';
 
-export type TimerMode = "work" | "shortBreak" | "longBreak";
+export type TimerMode = 'work' | 'shortBreak' | 'longBreak';
 
 const VALID_THEMES = Object.keys(themes);
 
 export const useTimer = () => {
   const [settings, setSettings] = useState<Settings>(() => {
-    const saved = localStorage.getItem("pomodoro-settings");
+    const saved = localStorage.getItem('pomodoro-settings');
     if (saved) {
       const parsed = JSON.parse(saved);
       // Validate theme, fallback to default if invalid
@@ -20,12 +20,12 @@ export const useTimer = () => {
     return defaultSettings;
   });
 
-  const [mode, setMode] = useState<TimerMode>("work");
+  const [mode, setMode] = useState<TimerMode>('work');
   const [timeLeft, setTimeLeft] = useState(settings.workDuration * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
   const [initialDuration, setInitialDuration] = useState(
-    settings.workDuration * 60,
+    settings.workDuration * 60
   );
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -33,21 +33,25 @@ export const useTimer = () => {
   const getModeDuration = useCallback(
     (currentMode: TimerMode): number => {
       switch (currentMode) {
-        case "work":
+        case 'work':
           return settings.workDuration * 60;
-        case "shortBreak":
+        case 'shortBreak':
           return settings.shortBreakDuration * 60;
-        case "longBreak":
+        case 'longBreak':
           return settings.longBreakDuration * 60;
         default:
           return settings.workDuration * 60;
       }
     },
-    [settings.workDuration, settings.shortBreakDuration, settings.longBreakDuration],
+    [
+      settings.workDuration,
+      settings.shortBreakDuration,
+      settings.longBreakDuration,
+    ]
   );
 
   useEffect(() => {
-    localStorage.setItem("pomodoro-settings", JSON.stringify(settings));
+    localStorage.setItem('pomodoro-settings', JSON.stringify(settings));
   }, [settings]);
 
   useEffect(() => {
@@ -81,24 +85,24 @@ export const useTimer = () => {
 
   const skipMode = useCallback(() => {
     setIsRunning(false);
-    if (mode === "work") {
+    if (mode === 'work') {
       const newSessionCount = sessionCount + 1;
       setSessionCount(newSessionCount);
 
       if (newSessionCount % settings.longBreakInterval === 0) {
-        setMode("longBreak");
+        setMode('longBreak');
       } else {
-        setMode("shortBreak");
+        setMode('shortBreak');
       }
     } else {
-      setMode("work");
+      setMode('work');
     }
     const newMode =
-      mode === "work"
+      mode === 'work'
         ? (sessionCount + 1) % settings.longBreakInterval === 0
-          ? "longBreak"
-          : "shortBreak"
-        : "work";
+          ? 'longBreak'
+          : 'shortBreak'
+        : 'work';
     const duration = getModeDuration(newMode);
     setTimeLeft(duration);
     setInitialDuration(duration);
@@ -112,7 +116,7 @@ export const useTimer = () => {
       setTimeLeft(duration);
       setInitialDuration(duration);
     },
-    [settings, getModeDuration],
+    [settings, getModeDuration]
   );
 
   useEffect(() => {
@@ -127,23 +131,23 @@ export const useTimer = () => {
         playNotificationSound();
       }
 
-      if (mode === "work") {
+      if (mode === 'work') {
         const newSessionCount = sessionCount + 1;
         setSessionCount(newSessionCount);
 
         if (newSessionCount % settings.longBreakInterval === 0) {
-          setMode("longBreak");
+          setMode('longBreak');
           const duration = settings.longBreakDuration * 60;
           setTimeLeft(duration);
           setInitialDuration(duration);
         } else {
-          setMode("shortBreak");
+          setMode('shortBreak');
           const duration = settings.shortBreakDuration * 60;
           setTimeLeft(duration);
           setInitialDuration(duration);
         }
       } else {
-        setMode("work");
+        setMode('work');
         const duration = settings.workDuration * 60;
         setTimeLeft(duration);
         setInitialDuration(duration);
@@ -160,7 +164,7 @@ export const useTimer = () => {
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const updateSettings = (newSettings: Partial<Settings>) => {

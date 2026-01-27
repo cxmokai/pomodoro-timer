@@ -1,131 +1,144 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PPX Pomodoro</title>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PPX Pomodoro</title>
 
-        <!-- Preconnect to Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-        <!-- Preload critical font -->
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap">
+    <!-- Preload critical font -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap"
+    />
 
-        <!-- Critical CSS to prevent FOUC -->
-        <script>
-            // Get saved theme immediately to set correct background
-            (function() {
-                var saved = localStorage.getItem('pomodoro-settings');
-                var theme = 'dark';
-                if (saved) {
-                    try {
-                        var parsed = JSON.parse(saved);
-                        if (parsed.theme === 'light' || parsed.theme === 'dark') {
-                            theme = parsed.theme;
-                        }
-                    } catch (e) {}
-                }
-                document.documentElement.setAttribute('data-theme', theme);
-            })();
-        </script>
-
-        <style>
-            /* Set background immediately based on theme */
-            html[data-theme="dark"] {
-                background: #1a1a1a;
+    <!-- Critical CSS to prevent FOUC -->
+    <script>
+      // Get saved theme immediately to set correct background
+      (function () {
+        var saved = localStorage.getItem('pomodoro-settings');
+        var theme = 'dark';
+        if (saved) {
+          try {
+            var parsed = JSON.parse(saved);
+            if (parsed.theme === 'light' || parsed.theme === 'dark') {
+              theme = parsed.theme;
             }
-            html[data-theme="light"] {
-                background: #ffffff;
-            }
+          } catch (e) {}
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
 
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: 'Space Grotesk', sans-serif;
-                font-weight: 700;
-            }
+    <style>
+      /* Set background immediately based on theme */
+      html[data-theme='dark'] {
+        background: #1a1a1a;
+      }
+      html[data-theme='light'] {
+        background: #ffffff;
+      }
 
-            /* Loading overlay instead of hiding content */
-            #loading-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 9999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: opacity 0.15s ease-out;
-            }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+      }
 
-            html[data-theme="dark"] #loading-overlay {
-                background: #1a1a1a;
-            }
+      /* Loading overlay instead of hiding content */
+      #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.15s ease-out;
+      }
 
-            html[data-theme="light"] #loading-overlay {
-                background: #ffffff;
-            }
+      html[data-theme='dark'] #loading-overlay {
+        background: #1a1a1a;
+      }
 
-            /* Loading text */
-            .loading-text {
-                font-size: 14px;
-                font-weight: 700;
-                font-family: 'Space Grotesk', sans-serif;
-                letter-spacing: -0.02em;
-                animation: brutal-blink 1s step-end infinite;
-            }
+      html[data-theme='light'] #loading-overlay {
+        background: #ffffff;
+      }
 
-            html[data-theme="dark"] .loading-text {
-                color: #ffffff;
-            }
+      /* Loading text */
+      .loading-text {
+        font-size: 14px;
+        font-weight: 700;
+        font-family: 'Space Grotesk', sans-serif;
+        letter-spacing: -0.02em;
+        animation: brutal-blink 1s step-end infinite;
+      }
 
-            html[data-theme="light"] .loading-text {
-                color: #000000;
-            }
+      html[data-theme='dark'] .loading-text {
+        color: #ffffff;
+      }
 
-            @keyframes brutal-blink {
-                0%, 49% { opacity: 1; }
-                50%, 100% { opacity: 0; }
-            }
+      html[data-theme='light'] .loading-text {
+        color: #000000;
+      }
 
-            /* Hide overlay when fonts ready */
-            html.fonts-loaded #loading-overlay,
-            html.fonts-fallback #loading-overlay {
-                opacity: 0;
-                pointer-events: none;
-            }
+      @keyframes brutal-blink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
 
-            /* Font when loaded */
-            html.fonts-loaded body {
-                font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
-            }
-        </style>
+      /* Hide overlay when fonts ready */
+      html.fonts-loaded #loading-overlay,
+      html.fonts-fallback #loading-overlay {
+        opacity: 0;
+        pointer-events: none;
+      }
 
-        <!-- Font loading detection -->
-        <script>
-            if (document.fonts) {
-                document.fonts.ready.then(function() {
-                    document.documentElement.classList.add('fonts-loaded');
-                });
-                setTimeout(function() {
-                    if (!document.documentElement.classList.contains('fonts-loaded')) {
-                        document.documentElement.classList.add('fonts-fallback');
-                    }
-                }, 150);
-            } else {
-                document.documentElement.classList.add('fonts-loaded');
-            }
-        </script>
-    </head>
-    <body>
-        <div id="loading-overlay">
-            <div class="loading-text">LOADING...</div>
-        </div>
-        <div id="root"></div>
-        <script type="module" src="/src/main.tsx"></script>
-    </body>
+      /* Font when loaded */
+      html.fonts-loaded body {
+        font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      }
+    </style>
+
+    <!-- Font loading detection -->
+    <script>
+      if (document.fonts) {
+        document.fonts.ready.then(function () {
+          document.documentElement.classList.add('fonts-loaded');
+        });
+        setTimeout(function () {
+          if (!document.documentElement.classList.contains('fonts-loaded')) {
+            document.documentElement.classList.add('fonts-fallback');
+          }
+        }, 150);
+      } else {
+        document.documentElement.classList.add('fonts-loaded');
+      }
+    </script>
+  </head>
+  <body>
+    <div id="loading-overlay">
+      <div class="loading-text">LOADING...</div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

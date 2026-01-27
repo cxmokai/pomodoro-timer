@@ -1,23 +1,29 @@
-import { type TimerMode } from '../hooks/useTimer'
-import { themes, modeColors } from '../utils/themes'
+import { type TimerMode } from '../hooks/useTimer';
+import { themes, modeColors } from '../utils/themes';
 
 interface TimerDisplayProps {
-  timeLeft: number
-  initialDuration: number
-  mode: TimerMode
-  currentTheme: string
-  isRunning: boolean
+  timeLeft: number;
+  initialDuration: number;
+  mode: TimerMode;
+  currentTheme: string;
+  isRunning: boolean;
 }
 
-export const TimerDisplay = ({ timeLeft, initialDuration, mode, currentTheme, isRunning }: TimerDisplayProps) => {
-  const theme = themes[currentTheme]
-  const modeInfo = modeColors[mode]
+export const TimerDisplay = ({
+  timeLeft,
+  initialDuration,
+  mode,
+  currentTheme,
+  isRunning,
+}: TimerDisplayProps) => {
+  const theme = themes[currentTheme];
+  const modeInfo = modeColors[mode];
 
-  const minutes = Math.floor(timeLeft / 60)
-  const seconds = timeLeft % 60
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
 
   const Digit = ({ value }: { value: number }) => {
-    const digits = value.toString().padStart(2, '0')
+    const digits = value.toString().padStart(2, '0');
     return (
       <div className="flex gap-2">
         {digits.split('').map((digit, i) => (
@@ -25,7 +31,9 @@ export const TimerDisplay = ({ timeLeft, initialDuration, mode, currentTheme, is
             key={i}
             className={`w-14 h-18 flex items-center justify-center text-4xl no-select ${theme.text}`}
             style={{
-              background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+              background: theme.surfaceHighlight
+                .replace('bg-[', '')
+                .replace(']', ''),
               border: `4px solid #000000`,
               boxShadow: `2px 2px 0 0 #000000`,
             }}
@@ -34,8 +42,8 @@ export const TimerDisplay = ({ timeLeft, initialDuration, mode, currentTheme, is
           </div>
         ))}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -61,7 +69,11 @@ export const TimerDisplay = ({ timeLeft, initialDuration, mode, currentTheme, is
       {/* Time Display */}
       <div className="flex items-center gap-4">
         <Digit value={minutes} />
-        <div className={`text-4xl ${theme.text} ${isRunning ? 'brutal-blink' : ''}`}>:</div>
+        <div
+          className={`text-4xl ${theme.text} ${isRunning ? 'brutal-blink' : ''}`}
+        >
+          :
+        </div>
         <Digit value={seconds} />
       </div>
 
@@ -76,5 +88,5 @@ export const TimerDisplay = ({ timeLeft, initialDuration, mode, currentTheme, is
         {modeInfo.name}
       </div>
     </div>
-  )
-}
+  );
+};

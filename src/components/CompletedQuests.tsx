@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { Trash2, Check, ChevronRight, ChevronDown, ChevronUp } from './icons';
-import { themes } from "../utils/themes";
-import type { CompletedQuest } from "../utils/themes";
+import { themes } from '../utils/themes';
+import type { CompletedQuest } from '../utils/themes';
 
 interface CompletedQuestsProps {
   currentTheme: string;
@@ -10,7 +10,10 @@ interface CompletedQuestsProps {
 
 type ExpandState = 'collapsed' | 'partial' | 'expanded';
 
-export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuestsProps) => {
+export const CompletedQuests = ({
+  currentTheme,
+  triggerUpdate,
+}: CompletedQuestsProps) => {
   const [quests, setQuests] = useState<CompletedQuest[]>([]);
   const [expandState, setExpandState] = useState<ExpandState>('collapsed');
   const theme = themes[currentTheme];
@@ -20,7 +23,7 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
   }, [triggerUpdate]);
 
   const loadQuests = () => {
-    const existing = localStorage.getItem("pomodoro-completed-quests");
+    const existing = localStorage.getItem('pomodoro-completed-quests');
     if (existing) {
       const parsed: CompletedQuest[] = JSON.parse(existing);
       setQuests(parsed);
@@ -33,18 +36,21 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return "Just now";
+    if (diffMins < 1) return 'Just now';
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
     return date.toLocaleDateString();
   };
 
   const deleteQuest = (id: string) => {
-    const existing = localStorage.getItem("pomodoro-completed-quests");
+    const existing = localStorage.getItem('pomodoro-completed-quests');
     if (existing) {
       const parsed: CompletedQuest[] = JSON.parse(existing);
-      const filtered = parsed.filter(q => q.id !== id);
-      localStorage.setItem("pomodoro-completed-quests", JSON.stringify(filtered));
+      const filtered = parsed.filter((q) => q.id !== id);
+      localStorage.setItem(
+        'pomodoro-completed-quests',
+        JSON.stringify(filtered)
+      );
       setQuests(filtered);
     }
   };
@@ -61,7 +67,8 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
     }
   };
 
-  const displayQuests = expandState === 'expanded' ? quests : quests.slice(0, 3);
+  const displayQuests =
+    expandState === 'expanded' ? quests : quests.slice(0, 3);
   const showList = expandState !== 'collapsed';
   const showMoreButton = quests.length > 3 && expandState !== 'collapsed';
 
@@ -75,9 +82,7 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
       >
         <div className={`flex items-center gap-3 ${theme.text} no-select`}>
           <Check className="w-5 h-5" style={{ color: '#FF6B35' }} />
-          <span className="text-sm">
-            COMPLETED QUESTS ({quests.length})
-          </span>
+          <span className="text-sm">COMPLETED QUESTS ({quests.length})</span>
         </div>
         <span
           className={`no-select transition-transform duration-300 ${
@@ -104,7 +109,8 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
               }}
             >
               <div className="flex-1 min-w-0">
-                <div className={`text-sm ${theme.text} truncate no-select`}
+                <div
+                  className={`text-sm ${theme.text} truncate no-select`}
                   style={{
                     textDecoration: 'line-through',
                     opacity: 0.7,
@@ -120,7 +126,9 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
                 onClick={() => deleteQuest(quest.id)}
                 className={`ml-3 px-3 py-2 brutal-btn cursor-pointer no-select`}
                 style={{
-                  background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
+                  background: theme.surfaceHighlight
+                    .replace('bg-[', '')
+                    .replace(']', ''),
                   color: theme.text.replace('text-[', '').replace(']', ''),
                 }}
               >
@@ -134,7 +142,9 @@ export const CompletedQuests = ({ currentTheme, triggerUpdate }: CompletedQuests
       {/* Show More/Less Button */}
       {showMoreButton && (
         <button
-          onClick={() => setExpandState(expandState === 'expanded' ? 'partial' : 'expanded')}
+          onClick={() =>
+            setExpandState(expandState === 'expanded' ? 'partial' : 'expanded')
+          }
           className={`w-full p-3 border-t-4 text-sm ${theme.textMuted} hover:${theme.text} cursor-pointer transition-colors no-select flex items-center justify-center gap-2`}
           style={{ borderColor: '#000000' }}
         >

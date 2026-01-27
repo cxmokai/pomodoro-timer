@@ -82,6 +82,7 @@ src/
 ### Adjusting Durations
 
 Open the Settings panel (press `T`) to customize:
+
 - Work duration (1-60 minutes, default: 25)
 - Short break (1-15 minutes, default: 5)
 - Long break (5-30 minutes, default: 15)
@@ -100,7 +101,7 @@ export const themes: Record<string, Theme> = {
     text: 'text-white',
     // ... other theme properties
   },
-}
+};
 ```
 
 ## License
