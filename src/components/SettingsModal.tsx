@@ -298,12 +298,12 @@ export const SettingsModal = ({
             >
               THEME
             </h3>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="flex gap-2">
               {Object.keys(themes).map((themeName) => (
                 <button
                   key={themeName}
                   onClick={() => handleChange('theme', themeName)}
-                  className="px-3 py-2 text-sm brutal-btn no-select"
+                  className="flex-1 px-3 py-2 text-sm brutal-btn no-select"
                   style={{
                     background:
                       localSettings.theme === themeName
