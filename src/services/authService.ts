@@ -1,5 +1,6 @@
 import {
   signInWithPopup,
+  linkWithPopup,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   linkWithCredential,
@@ -125,4 +126,56 @@ export const getProviderName = (providerId: string): string => {
     'password': 'Email',
   };
   return names[providerId] || providerId;
+};
+
+export type LinkProviderResult =
+  | { type: 'success' }
+  | { type: 'cancelled' }
+  | { type: 'error'; message: string };
+
+export const linkGoogleAccount = async (user: User): Promise<LinkProviderResult> => {
+  try {
+    await linkWithPopup(user, googleProvider);
+    return { type: 'success' };
+  } catch (error) {
+    const authError = error as AuthError;
+
+    if (authError.code === 'auth/popup-closed-by-user') {
+      return { type: 'cancelled' };
+    }
+    if (authError.code === 'auth/provider-already-linked') {
+      return { type: 'error', message: 'Google account already linked' };
+    }
+    if (authError.code === 'auth/credential-already-in-use') {
+      return { type: 'error', message: 'This Google account is already linked to another user' };
+    }
+
+    return { type: 'error', message: 'Failed to link Google account' };
+  }
+};
+
+export const linkGithubAccount = async (user: User): Promise<LinkProviderResult> => {
+  try {
+    await linkWithPopup(user, githubProvider);
+    return { type: 'success' };
+  } catch (error) {
+    const authError = error as AuthError;
+
+    if (authError.code === 'auth/popup-closed-by-user') {
+      return { type: 'cancelled' };
+    }
+    if (authError.code === 'auth/provider-already-linked') {
+      return { type: 'error', message: 'GitHub account already linked' };
+    }
+    if (authError.code === 'auth/credential-already-in-use') {
+      return { type: 'error', message: 'This GitHub account is already linked to another user' };
+    }
+
+    return { type: 'error', message: 'Failed to link GitHub account' };
+  }
+};
+
+export const getLinkedProviders = (user: User | null): string[] => {
+  if (!user) return [];
+  return user.providerData.map((p) => p.providerId);
 };

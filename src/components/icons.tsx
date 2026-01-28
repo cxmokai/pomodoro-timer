@@ -25,4 +25,5 @@ export {
   XCircle,
   Search,
   Target,
+  Github,
 } from 'lucide-react';

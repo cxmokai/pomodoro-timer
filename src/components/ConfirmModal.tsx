@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { X } from './icons';
 import { themes } from '../utils/themes';
 
@@ -10,6 +11,7 @@ interface ConfirmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   currentTheme: string;
+  customActions?: ReactNode;
 }
 
 export const ConfirmModal = ({
@@ -21,6 +23,7 @@ export const ConfirmModal = ({
   onConfirm,
   onCancel,
   currentTheme,
+  customActions,
 }: ConfirmModalProps) => {
   const theme = themes[currentTheme];
 
@@ -63,40 +66,44 @@ export const ConfirmModal = ({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 p-6 pt-0">
-            <button
-              onClick={onCancel}
-              className={`flex-1 brutal-btn px-4 py-3 cursor-pointer no-select`}
-              style={{
-                background: theme.surfaceHighlight
-                  .replace('bg-[', '')
-                  .replace(']', ''),
-                color: theme.text.replace('text-[', '').replace(']', ''),
-              }}
-            >
-              {cancelText}
-            </button>
-            <button
-              onClick={onConfirm}
-              className={`flex-1 brutal-btn px-4 py-3 cursor-pointer no-select`}
-              style={{
-                background: theme.buttonPrimary
-                  .split(' ')
-                  .find((c) => c.startsWith('bg-['))
-                  ?.replace('bg-[', '')
-                  .replace(']', '') || theme.accent,
-                color: theme.buttonPrimary.includes('text-[')
-                  ? theme.buttonPrimary
-                      .split(' ')
-                      .find((c) => c.startsWith('text-['))
-                      ?.replace('text-[', '')
-                      .replace(']', '') || '#ffffff'
-                  : '#ffffff',
-              }}
-            >
-              {confirmText}
-            </button>
-          </div>
+          {customActions ? (
+            <div className="p-6 pt-0">{customActions}</div>
+          ) : (
+            <div className="flex gap-3 p-6 pt-0">
+              <button
+                onClick={onCancel}
+                className={`flex-1 brutal-btn px-4 py-3 cursor-pointer no-select`}
+                style={{
+                  background: theme.surfaceHighlight
+                    .replace('bg-[', '')
+                    .replace(']', ''),
+                  color: theme.text.replace('text-[', '').replace(']', ''),
+                }}
+              >
+                {cancelText}
+              </button>
+              <button
+                onClick={onConfirm}
+                className={`flex-1 brutal-btn px-4 py-3 cursor-pointer no-select`}
+                style={{
+                  background: theme.buttonPrimary
+                    .split(' ')
+                    .find((c) => c.startsWith('bg-['))
+                    ?.replace('bg-[', '')
+                    .replace(']', '') || theme.accent,
+                  color: theme.buttonPrimary.includes('text-[')
+                    ? theme.buttonPrimary
+                        .split(' ')
+                        .find((c) => c.startsWith('text-['))
+                        ?.replace('text-[', '')
+                        .replace(']', '') || '#ffffff'
+                    : '#ffffff',
+                }}
+              >
+                {confirmText}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
