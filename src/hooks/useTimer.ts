@@ -11,16 +11,17 @@ interface TimerState {
   sessionCount: number;
   sessionStartTime: number | null;
   initialTimeLeft: number;
+  elapsedTime: number;
 }
 
 const TIMER_STORAGE_KEY = 'pomodoro-timer-state';
 
 const saveTimerState = (state: TimerState) => {
-  sessionStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(state));
 };
 
 const loadTimerState = (): TimerState | null => {
-  const saved = sessionStorage.getItem(TIMER_STORAGE_KEY);
+  const saved = localStorage.getItem(TIMER_STORAGE_KEY);
   if (saved) {
     try {
       return JSON.parse(saved);
@@ -32,11 +33,18 @@ const loadTimerState = (): TimerState | null => {
 };
 
 const clearTimerState = () => {
-  sessionStorage.removeItem(TIMER_STORAGE_KEY);
+  localStorage.removeItem(TIMER_STORAGE_KEY);
 };
 
 export const useTimer = () => {
-  const { settings, updateSettings: updateDataSettings, sessions, setSessions, incrementTodayPomodoroCount } = useData();
+  const {
+    settings,
+    updateSettings: updateDataSettings,
+    sessions,
+    setSessions,
+    incrementTodayPomodoroCount,
+    isLoading,
+  } = useData();
 
   const getModeDuration = useCallback(
     (currentMode: TimerMode): number => {
@@ -59,31 +67,48 @@ export const useTimer = () => {
   );
 
   const hasRestoredStateRef = useRef(false);
+  const hasCompletedInitialLoadRef = useRef(false);
   const lastKnownSettingsRef = useRef(settings);
 
-  // Clear saved state when user explicitly changes settings (not on initial load)
   useEffect(() => {
-    // Skip if we haven't restored from sessionStorage yet
+    if (isLoading) return;
+
     if (!hasRestoredStateRef.current) {
       hasRestoredStateRef.current = true;
       lastKnownSettingsRef.current = settings;
       return;
     }
 
+    if (!hasCompletedInitialLoadRef.current) {
+      hasCompletedInitialLoadRef.current = true;
+      lastKnownSettingsRef.current = settings;
+      return;
+    }
+
     // Check if settings actually changed (user explicitly changed them)
-    if (lastKnownSettingsRef.current.workDuration !== settings.workDuration ||
-        lastKnownSettingsRef.current.shortBreakDuration !== settings.shortBreakDuration ||
-        lastKnownSettingsRef.current.longBreakDuration !== settings.longBreakDuration) {
+    if (
+      lastKnownSettingsRef.current.workDuration !== settings.workDuration ||
+      lastKnownSettingsRef.current.shortBreakDuration !==
+        settings.shortBreakDuration ||
+      lastKnownSettingsRef.current.longBreakDuration !==
+        settings.longBreakDuration
+    ) {
       // User changed settings, clear saved state and reset timer
       clearTimerState();
-      const newDuration = settings.workDuration * 60; // Use work duration as default
+      const newDuration = settings.workDuration * 60;
       setTimeLeft(newDuration);
       setInitialDuration(newDuration);
       setIsRunning(false);
       sessionStartTimeRef.current = null;
+      elapsedTimeRef.current = 0;
       lastKnownSettingsRef.current = settings;
     }
-  }, [settings.workDuration, settings.shortBreakDuration, settings.longBreakDuration]);
+  }, [
+    settings.workDuration,
+    settings.shortBreakDuration,
+    settings.longBreakDuration,
+    isLoading,
+  ]);
 
   // Restore state from sessionStorage on mount
   const getInitialState = () => {
@@ -92,21 +117,48 @@ export const useTimer = () => {
     if (saved) {
       // If timer is running, restore with elapsed time calculation
       if (saved.isRunning && saved.sessionStartTime) {
-        const elapsed = Math.floor((Date.now() - saved.sessionStartTime) / 1000);
-        const restoredTimeLeft = Math.max(0, saved.initialTimeLeft - elapsed);
+        const currentElapsed = Math.floor(
+          (Date.now() - saved.sessionStartTime) / 1000
+        );
+        const effectiveElapsed = saved.elapsedTime + currentElapsed;
+        const restoredTimeLeft = Math.max(
+          0,
+          saved.initialTimeLeft - effectiveElapsed
+        );
+        const timerNaturallyCompleted =
+          effectiveElapsed >= saved.initialTimeLeft;
 
         return {
           mode: saved.mode,
           timeLeft: restoredTimeLeft,
-          isRunning: restoredTimeLeft > 0,
+          isRunning: !timerNaturallyCompleted && restoredTimeLeft > 0,
           sessionCount: saved.sessionCount,
           initialDuration: saved.initialTimeLeft,
           sessionStartTime: saved.sessionStartTime,
+          elapsedTime: timerNaturallyCompleted
+            ? saved.elapsedTime + currentElapsed
+            : saved.elapsedTime,
         };
       }
 
-      // If timer is not running, use saved initialTimeLeft (which is the paused timeLeft)
-      // Clear sessionStartTime since the timer is paused
+      // If timer is paused, restore the paused state
+      if (!saved.isRunning && saved.elapsedTime > 0) {
+        const restoredTimeLeft = Math.max(
+          0,
+          saved.initialTimeLeft - saved.elapsedTime
+        );
+        return {
+          mode: saved.mode,
+          timeLeft: restoredTimeLeft,
+          isRunning: false,
+          sessionCount: saved.sessionCount,
+          initialDuration: saved.initialTimeLeft,
+          sessionStartTime: saved.sessionStartTime,
+          elapsedTime: saved.elapsedTime,
+        };
+      }
+
+      // If timer is not running and not paused (fresh start), use saved initialTimeLeft
       return {
         mode: saved.mode,
         timeLeft: saved.initialTimeLeft,
@@ -114,6 +166,7 @@ export const useTimer = () => {
         sessionCount: saved.sessionCount,
         initialDuration: saved.initialTimeLeft,
         sessionStartTime: null,
+        elapsedTime: 0,
       };
     }
 
@@ -126,6 +179,7 @@ export const useTimer = () => {
       sessionCount: 0,
       initialDuration: defaultDuration,
       sessionStartTime: null,
+      elapsedTime: 0,
     };
   };
 
@@ -134,73 +188,84 @@ export const useTimer = () => {
   const [timeLeft, setTimeLeft] = useState(initialState.timeLeft);
   const [isRunning, setIsRunning] = useState(initialState.isRunning);
   const [sessionCount, setSessionCount] = useState(initialState.sessionCount);
-  const [initialDuration, setInitialDuration] = useState(initialState.initialDuration);
+  const [initialDuration, setInitialDuration] = useState(
+    initialState.initialDuration
+  );
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const sessionStartTimeRef = useRef<number | null>(initialState.sessionStartTime);
-  const isInitializedRef = useRef(false);
+  const sessionStartTimeRef = useRef<number | null>(
+    initialState.sessionStartTime
+  );
+  const elapsedTimeRef = useRef<number>(initialState.elapsedTime);
+  const prevModeRef = useRef<TimerMode | null>(null);
 
-  // Save state to sessionStorage whenever it changes
+  // Save state to localStorage whenever it changes
   useEffect(() => {
     const stateToSave: TimerState = {
       mode,
       isRunning,
       sessionCount,
-      sessionStartTime: isRunning ? sessionStartTimeRef.current : null,
-      initialTimeLeft: isRunning ? initialDuration : timeLeft,
+      sessionStartTime:
+        isRunning || elapsedTimeRef.current > 0
+          ? sessionStartTimeRef.current
+          : null,
+      initialTimeLeft: initialDuration,
+      elapsedTime: elapsedTimeRef.current,
     };
-    console.log('[Timer] Saving state:', {
-      ...stateToSave,
-      timeLeft,
-      initialDuration,
-      sessionStartTimeRef: sessionStartTimeRef.current,
-    });
     saveTimerState(stateToSave);
   }, [mode, isRunning, sessionCount, initialDuration, timeLeft]);
 
-  // Update timeLeft when mode changes (but not on initial render)
   useEffect(() => {
-    if (isInitializedRef.current) {
+    if (prevModeRef.current !== null && prevModeRef.current !== mode) {
       const duration = getModeDuration(mode);
       setTimeLeft(duration);
       setInitialDuration(duration);
       setIsRunning(false);
       sessionStartTimeRef.current = null;
-    } else {
-      isInitializedRef.current = true;
+      elapsedTimeRef.current = 0;
     }
+    prevModeRef.current = mode;
   }, [mode, getModeDuration]);
 
   const startTimer = useCallback(() => {
-    // Record session start time for work sessions
-    if (mode === 'work' && !sessionStartTimeRef.current) {
+    if (!sessionStartTimeRef.current) {
       sessionStartTimeRef.current = Date.now();
     }
     setIsRunning(true);
-  }, [mode]);
+  }, []);
 
   const pauseTimer = useCallback(() => {
+    if (sessionStartTimeRef.current) {
+      const elapsed = Math.floor(
+        (Date.now() - sessionStartTimeRef.current) / 1000
+      );
+      elapsedTimeRef.current += elapsed;
+      sessionStartTimeRef.current = null;
+    }
     setIsRunning(false);
   }, []);
 
   // Save incomplete session when user skips or resets
-  const saveIncompleteSession = useCallback((currentMode: TimerMode, endReason: 'skipped' | 'reset') => {
-    const startTime = sessionStartTimeRef.current;
-    if (startTime && currentMode === 'work') {
-      const incompleteSession: PomodoroSession = {
-        id: `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        startTime,
-        endTime: Date.now(),
-        type: currentMode,
-        completed: false,
-        endReason,
-      };
-      setSessions([incompleteSession, ...sessions]);
-      sessionStartTimeRef.current = null;
-      // Clear saved state when skipping or resetting
-      clearTimerState();
-    }
-  }, [sessions, setSessions]);
+  const saveIncompleteSession = useCallback(
+    (currentMode: TimerMode, endReason: 'skipped' | 'reset') => {
+      const startTime = sessionStartTimeRef.current;
+      if (startTime && currentMode === 'work') {
+        const incompleteSession: PomodoroSession = {
+          id: `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          startTime,
+          endTime: Date.now(),
+          type: currentMode,
+          completed: false,
+          endReason,
+        };
+        setSessions([incompleteSession, ...sessions]);
+        sessionStartTimeRef.current = null;
+        // Clear saved state when skipping or resetting
+        clearTimerState();
+      }
+    },
+    [sessions, setSessions]
+  );
 
   const resetTimer = useCallback(() => {
     saveIncompleteSession(mode, 'reset');
