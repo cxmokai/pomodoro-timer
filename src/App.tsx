@@ -177,16 +177,16 @@ function AppContent() {
             </div>
             <button
               onClick={() => setIsHistoryOpen(true)}
-              className={`brutal-btn px-3 py-1 text-xs flex items-center gap-2 cursor-pointer no-select`}
+              className={`brutal-btn px-3 py-1 flex items-center justify-center cursor-pointer no-select`}
               style={{
                 background: theme.surfaceHighlight
                   .replace('bg-[', '')
                   .replace(']', ''),
                 color: theme.text.replace('text-[', '').replace(']', ''),
               }}
+              title="Completed quests history"
             >
               <History className="w-4 h-4" />
-              <span>COMPLETED</span>
             </button>
           </div>
           <QuestInput currentTheme={settings.theme} />
