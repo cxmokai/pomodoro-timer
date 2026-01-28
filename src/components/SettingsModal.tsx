@@ -107,9 +107,10 @@ export const SettingsModal = ({
                 min="1"
                 max="60"
                 value={localSettings.workDuration}
-                onChange={(e) =>
-                  handleChange('workDuration', parseInt(e.target.value))
-                }
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  handleChange('workDuration', isNaN(value) ? 0 : value);
+                }}
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
                   background: theme.bg.replace('bg-[', '').replace(']', ''),
@@ -131,9 +132,10 @@ export const SettingsModal = ({
                 min="1"
                 max="15"
                 value={localSettings.shortBreakDuration}
-                onChange={(e) =>
-                  handleChange('shortBreakDuration', parseInt(e.target.value))
-                }
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  handleChange('shortBreakDuration', isNaN(value) ? 0 : value);
+                }}
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
                   background: theme.bg.replace('bg-[', '').replace(']', ''),
@@ -158,9 +160,10 @@ export const SettingsModal = ({
                 min="5"
                 max="30"
                 value={localSettings.longBreakDuration}
-                onChange={(e) =>
-                  handleChange('longBreakDuration', parseInt(e.target.value))
-                }
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  handleChange('longBreakDuration', isNaN(value) ? 0 : value);
+                }}
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
                   background: theme.bg.replace('bg-[', '').replace(']', ''),
@@ -182,9 +185,10 @@ export const SettingsModal = ({
                 min="2"
                 max="8"
                 value={localSettings.longBreakInterval}
-                onChange={(e) =>
-                  handleChange('longBreakInterval', parseInt(e.target.value))
-                }
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  handleChange('longBreakInterval', isNaN(value) ? 0 : value);
+                }}
                 className="w-full px-3 py-2 text-sm brutal-input no-select"
                 style={{
                   background: theme.bg.replace('bg-[', '').replace(']', ''),

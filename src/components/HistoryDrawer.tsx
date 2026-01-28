@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Trash2, X, Search, CheckCircle2, History } from './icons';
 import { ConfirmModal } from './ConfirmModal';
 import { themes } from '../utils/themes';
-import type { PomodoroQuest, PomodoroSession } from '../utils/themes';
+import type { PomodoroQuest } from '../utils/themes';
 import { useData } from '../contexts/DataContext';
 import {
   getDateLabel,
@@ -50,7 +50,6 @@ export const HistoryDrawer = ({
   const {
     completedQuests,
     deletePomodoroQuest,
-    sessions,
     settings,
     getPomodoroQuestsByDateRange,
   } = useData();
@@ -232,11 +231,6 @@ export const HistoryDrawer = ({
     setQuestToDelete(null);
   }, []);
 
-  // Calculate total completed and sessions stats (all time)
-  const totalCompleted = filteredQuests.length;
-  const completedSessions = sessions.filter((s: PomodoroSession) => s.completed && s.type === 'work').length;
-  const skippedSessions = sessions.filter((s: PomodoroSession) => !s.completed && s.type === 'work').length;
-
   return (
     <>
       {/* Backdrop */}
@@ -299,42 +293,12 @@ export const HistoryDrawer = ({
           </div>
         </div>
 
-        {/* Stats */}
-        <div className={`p-4 border-b-2 ${theme.surfaceHighlight}`}>
-          <div className="flex justify-around text-center">
-            <div>
-              <div className={`text-2xl font-bold ${theme.text}`}>
-                {totalCompleted}
-              </div>
-              <div className={`text-xs ${theme.textMuted} no-select`}>
-                QUESTS
-              </div>
-            </div>
-            <div>
-              <div className={`text-2xl font-bold`} style={{ color: '#22c55e' }}>
-                {completedSessions}
-              </div>
-              <div className={`text-xs ${theme.textMuted} no-select`}>
-                COMPLETED
-              </div>
-            </div>
-            <div>
-              <div className={`text-2xl font-bold`} style={{ color: '#ef4444' }}>
-                {skippedSessions}
-              </div>
-              <div className={`text-xs ${theme.textMuted} no-select`}>
-                SKIPPED
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Quest List with Infinite Scroll */}
         <div
           ref={scrollContainerRef}
           className="overflow-y-auto"
           onScroll={handleScroll}
-          style={{ maxHeight: 'calc(100vh - 260px)' }}
+          style={{ maxHeight: 'calc(100vh - 180px)' }}
         >
           {sortedDates.length === 0 ? (
             <div className="p-6">
