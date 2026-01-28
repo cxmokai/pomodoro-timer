@@ -62,6 +62,7 @@ export const HistoryDrawer = ({
   const [questToDelete, setQuestToDelete] = useState<PomodoroQuest | null>(null);
   const [daysLoaded, setDaysLoaded] = useState(INITIAL_DAYS_TO_LOAD);
   const [hasMore, setHasMore] = useState(true);
+  const [scrolledNearBottom, setScrolledNearBottom] = useState(false);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -71,6 +72,7 @@ export const HistoryDrawer = ({
       setDaysLoaded(INITIAL_DAYS_TO_LOAD);
       setHasMore(true);
       setSearchQuery('');
+      setScrolledNearBottom(false);
     }
   }, [isOpen]);
 
@@ -165,6 +167,13 @@ export const HistoryDrawer = ({
 
     const { scrollTop, scrollHeight, clientHeight } = container;
     const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+
+    // Show "Scroll to load more" when scrolled near bottom
+    if (scrollPercentage > 0.7) {
+      setScrolledNearBottom(true);
+    } else {
+      setScrolledNearBottom(false);
+    }
 
     // Load more when user is within 100px of bottom or scrolled 90%
     if (scrollPercentage > 0.9 || scrollHeight - scrollTop - clientHeight < 100) {
@@ -402,7 +411,7 @@ export const HistoryDrawer = ({
               })}
 
               {/* Load More Indicator */}
-              {hasMore && !searchQuery && (
+              {hasMore && !searchQuery && scrolledNearBottom && (
                 <div className="text-center py-4">
                   <p className={`text-xs ${theme.textMuted} no-select`}>
                     Scroll to load more...
