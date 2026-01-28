@@ -94,6 +94,7 @@ export interface PomodoroSession {
   type: 'work' | 'shortBreak' | 'longBreak';
   questId?: string;
   completed: boolean;
+  endReason?: 'skipped' | 'reset';
 }
 
 export interface PomodoroQuest {

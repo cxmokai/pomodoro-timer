@@ -57,8 +57,8 @@ export const useTimer = () => {
     setIsRunning(false);
   }, []);
 
-  // Save incomplete session when user skips
-  const saveIncompleteSession = useCallback((currentMode: TimerMode) => {
+  // Save incomplete session when user skips or resets
+  const saveIncompleteSession = useCallback((currentMode: TimerMode, endReason: 'skipped' | 'reset') => {
     const startTime = sessionStartTimeRef.current;
     if (startTime && currentMode === 'work') {
       const incompleteSession: PomodoroSession = {
@@ -67,6 +67,7 @@ export const useTimer = () => {
         endTime: Date.now(),
         type: currentMode,
         completed: false,
+        endReason,
       };
       setSessions([incompleteSession, ...sessions]);
       sessionStartTimeRef.current = null;
@@ -74,7 +75,7 @@ export const useTimer = () => {
   }, [sessions, setSessions]);
 
   const resetTimer = useCallback(() => {
-    saveIncompleteSession(mode);
+    saveIncompleteSession(mode, 'reset');
     setIsRunning(false);
     const duration = getModeDuration(mode);
     setTimeLeft(duration);
@@ -90,7 +91,7 @@ export const useTimer = () => {
   }, [isRunning, startTimer, pauseTimer]);
 
   const skipMode = useCallback(() => {
-    saveIncompleteSession(mode);
+    saveIncompleteSession(mode, 'skipped');
     setIsRunning(false);
     if (mode === 'work') {
       const newSessionCount = sessionCount + 1;
