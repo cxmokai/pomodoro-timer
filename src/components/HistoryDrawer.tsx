@@ -284,6 +284,7 @@ export const HistoryDrawer = ({
               style={{
                 background: theme.bg.replace('bg-[', '').replace(']', ''),
                 color: theme.text.replace('text-[', '').replace(']', ''),
+                boxShadow: '2px 2px 0 0 #000000',
               }}
             />
           </div>
