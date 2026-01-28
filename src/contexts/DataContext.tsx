@@ -17,6 +17,9 @@ interface DataContextType {
   sessions: PomodoroSession[];
   setSessions: (sessions: PomodoroSession[] | ((prev: PomodoroSession[]) => PomodoroSession[])) => void;
   isLoading: boolean;
+  yesterdayIncompleteQuest: { id: string; title: string } | null;
+  dismissYesterdayQuest: () => void;
+  moveYesterdayQuestToToday: () => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -135,6 +138,49 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }));
   }, []);
 
+  // Check if there's an incomplete quest from yesterday
+  const getYesterdayIncompleteQuest = useCallback((): { id: string; title: string } | null => {
+    const currentTask = data.tasks.find(t => t.id === 'current');
+    if (!currentTask) return null;
+
+    const taskDate = new Date(currentTask.createdAt);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Check if task was created yesterday (or earlier)
+    const isFromYesterday =
+      taskDate.toDateString() !== today.toDateString();
+
+    if (isFromYesterday) {
+      return { id: currentTask.id, title: currentTask.title };
+    }
+    return null;
+  }, [data.tasks]);
+
+  const yesterdayIncompleteQuest = getYesterdayIncompleteQuest();
+
+  const dismissYesterdayQuest = useCallback(() => {
+    setData((prev) => ({
+      ...prev,
+      tasks: prev.tasks.filter(t => t.id !== 'current'),
+      lastUpdated: Date.now(),
+    }));
+  }, []);
+
+  const moveYesterdayQuestToToday = useCallback(() => {
+    // The quest is already current, just update its createdAt to today
+    setData((prev) => ({
+      ...prev,
+      tasks: prev.tasks.map(t =>
+        t.id === 'current'
+          ? { ...t, createdAt: Date.now() }
+          : t
+      ),
+      lastUpdated: Date.now(),
+    }));
+  }, []);
+
   // Get current task from tasks array
   const currentTask = data.tasks.find(t => t.id === 'current')?.title || '';
   const completedQuests: CompletedQuest[] = data.tasks
@@ -158,6 +204,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         sessions: data.sessions,
         setSessions,
         isLoading,
+        yesterdayIncompleteQuest,
+        dismissYesterdayQuest,
+        moveYesterdayQuestToToday,
       }}
     >
       {children}

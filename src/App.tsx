@@ -5,8 +5,8 @@ import { TimerDisplay } from './components/TimerDisplay';
 import { Controls } from './components/Controls';
 import { ModeIndicator } from './components/ModeIndicator';
 import { TaskInput } from './components/TaskInput';
-import { CompletedQuestsDrawer } from './components/CompletedQuestsDrawer';
-import { SessionHistoryDrawer } from './components/SessionHistoryDrawer';
+import { HistoryDrawer } from './components/HistoryDrawer';
+import { YesterdayQuestModal } from './components/YesterdayQuestModal';
 import { SettingsModal } from './components/SettingsModal';
 import { AuthButton } from './components/AuthButton';
 import { AuthProvider } from './contexts/AuthContext';
@@ -20,7 +20,6 @@ import {
   Diamond,
   Timer,
   History,
-  Clock,
 } from './components/icons';
 
 function AppContent() {
@@ -35,11 +34,15 @@ function AppContent() {
     resetTimer,
     skipMode,
   } = useTimer();
-  const { updateSettings: updateDataSettings } = useData();
+  const {
+    updateSettings: updateDataSettings,
+    yesterdayIncompleteQuest,
+    dismissYesterdayQuest,
+    moveYesterdayQuestToToday,
+  } = useData();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSessionHistoryOpen, setIsSessionHistoryOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -61,12 +64,11 @@ function AppContent() {
           setIsSettingsOpen((prev) => !prev);
           break;
         case 'h':
-          setIsSessionHistoryOpen((prev) => !prev);
+          setIsHistoryOpen((prev) => !prev);
           break;
         case 'escape':
           setIsSettingsOpen(false);
-          setIsDrawerOpen(false);
-          setIsSessionHistoryOpen(false);
+          setIsHistoryOpen(false);
           break;
       }
     };
@@ -103,20 +105,6 @@ function AppContent() {
             )}
           </h1>
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsSessionHistoryOpen(true)}
-              className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center gap-2 cursor-pointer no-select`}
-              style={{
-                background: theme.surfaceHighlight
-                  .replace('bg-[', '')
-                  .replace(']', ''),
-                color: theme.text.replace('text-[', '').replace(']', ''),
-              }}
-              title="Session History (H)"
-            >
-              <Clock className="w-4 h-4" />
-              <span className="hidden sm:inline">HISTORY</span>
-            </button>
             <AuthButton theme={theme} />
             <button
               onClick={() =>
@@ -188,7 +176,7 @@ function AppContent() {
               <span className="text-sm no-select">CURRENT QUEST</span>
             </div>
             <button
-              onClick={() => setIsDrawerOpen(true)}
+              onClick={() => setIsHistoryOpen(true)}
               className={`brutal-btn px-3 py-1 text-xs flex items-center gap-2 cursor-pointer no-select`}
               style={{
                 background: theme.surfaceHighlight
@@ -211,15 +199,17 @@ function AppContent() {
         currentTheme={settings.theme}
       />
 
-      <CompletedQuestsDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+      <HistoryDrawer
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
         currentTheme={settings.theme}
       />
 
-      <SessionHistoryDrawer
-        isOpen={isSessionHistoryOpen}
-        onClose={() => setIsSessionHistoryOpen(false)}
+      <YesterdayQuestModal
+        isOpen={!!yesterdayIncompleteQuest}
+        yesterdayQuest={yesterdayIncompleteQuest}
+        onDismiss={dismissYesterdayQuest}
+        onMoveToToday={moveYesterdayQuestToToday}
         currentTheme={settings.theme}
       />
     </div>

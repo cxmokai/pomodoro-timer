@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Check } from './icons';
+import { ConfirmModal } from './ConfirmModal';
 import { themes } from '../utils/themes';
 import type { CompletedQuest } from '../utils/themes';
 import { useData } from '../contexts/DataContext';
@@ -16,6 +17,7 @@ export const TaskInput = ({
   const { currentTask, setCurrentTask, addCompletedQuest } = useData();
   const [isEditing, setIsEditing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const theme = themes[currentTheme];
 
   useEffect(() => {
@@ -23,9 +25,13 @@ export const TaskInput = ({
     localStorage.setItem('pomodoro-task', currentTask);
   }, [currentTask]);
 
-  const handleComplete = () => {
+  const handleCompleteClick = () => {
     if (!currentTask.trim()) return;
+    setShowConfirmModal(true);
+  };
 
+  const handleCompleteConfirm = () => {
+    setShowConfirmModal(false);
     setIsCompleted(true);
 
     // Save to completed quests
@@ -48,7 +54,12 @@ export const TaskInput = ({
     }, 1500);
   };
 
+  const handleCompleteCancel = () => {
+    setShowConfirmModal(false);
+  };
+
   return (
+    <>
     <div className="flex items-center gap-3">
       <div className="flex-1">
         {isEditing ? (
@@ -99,7 +110,7 @@ export const TaskInput = ({
       {/* Complete button - only show when there's a task */}
       {currentTask && !isEditing && (
         <button
-          onClick={handleComplete}
+          onClick={handleCompleteClick}
           disabled={isCompleted}
           className={`brutal-btn px-5 py-3 flex items-center justify-center cursor-pointer no-select`}
           style={{
@@ -112,5 +123,17 @@ export const TaskInput = ({
         </button>
       )}
     </div>
+
+    <ConfirmModal
+      isOpen={showConfirmModal}
+      title="COMPLETE QUEST?"
+      message={`Mark "${currentTask}" as completed?`}
+      confirmText="COMPLETE"
+      cancelText="CANCEL"
+      onConfirm={handleCompleteConfirm}
+      onCancel={handleCompleteCancel}
+      currentTheme={currentTheme}
+    />
+    </>
   );
 };

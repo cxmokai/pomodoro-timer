@@ -23,4 +23,5 @@ export {
   LogOut,
   CheckCircle2,
   XCircle,
+  Search,
 } from 'lucide-react';

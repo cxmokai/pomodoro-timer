@@ -1,5 +1,8 @@
-import { Trash2, X } from './icons';
+import { useState, useEffect, useCallback } from 'react';
+import { Trash2, X, Search } from './icons';
+import { ConfirmModal } from './ConfirmModal';
 import { themes } from '../utils/themes';
+import type { CompletedQuest } from '../utils/themes';
 import { useData } from '../contexts/DataContext';
 
 interface CompletedQuestsDrawerProps {
@@ -16,6 +19,40 @@ export const CompletedQuestsDrawer = ({
 }: CompletedQuestsDrawerProps) => {
   const { completedQuests, deleteCompletedQuest } = useData();
   const theme = themes[currentTheme];
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredQuests, setFilteredQuests] = useState<CompletedQuest[]>(completedQuests);
+  const [questToDelete, setQuestToDelete] = useState<CompletedQuest | null>(null);
+
+  // Debounced search
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (searchQuery.trim() === '') {
+        setFilteredQuests(completedQuests);
+      } else {
+        const filtered = completedQuests.filter((quest) =>
+          quest.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredQuests(filtered);
+      }
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery, completedQuests]);
+
+  const handleDeleteClick = useCallback((quest: CompletedQuest) => {
+    setQuestToDelete(quest);
+  }, []);
+
+  const handleDeleteConfirm = useCallback(() => {
+    if (questToDelete) {
+      deleteCompletedQuest(questToDelete.id);
+      setQuestToDelete(null);
+    }
+  }, [questToDelete, deleteCompletedQuest]);
+
+  const handleDeleteCancel = useCallback(() => {
+    setQuestToDelete(null);
+  }, []);
 
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -51,36 +88,56 @@ export const CompletedQuestsDrawer = ({
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-4">
-          <h2 className={`text-lg ${theme.text} no-select`}>
-            COMPLETED QUESTS ({completedQuests.length})
-          </h2>
-          <button
-            onClick={onClose}
-            className={`brutal-btn p-2 cursor-pointer no-select`}
-            style={{
-              background: theme.surfaceHighlight
-                .replace('bg-[', '')
-                .replace(']', ''),
-              color: theme.text.replace('text-[', '').replace(']', ''),
-            }}
-          >
-            <X className="w-5 h-5" />
-          </button>
+        <div className="p-6 border-b-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className={`text-lg ${theme.text} no-select`}>
+              COMPLETED QUESTS ({filteredQuests.length})
+            </h2>
+            <button
+              onClick={onClose}
+              className={`brutal-btn p-2 cursor-pointer no-select`}
+              style={{
+                background: theme.surfaceHighlight
+                  .replace('bg-[', '')
+                  .replace(']', ''),
+                color: theme.text.replace('text-[', '').replace(']', ''),
+              }}
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Search Input */}
+          <div className="relative">
+            <Search
+              className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme.textMuted}`}
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search completed quests..."
+              className={`w-full pl-10 pr-4 py-2 text-sm brutal-input no-select`}
+              style={{
+                background: theme.bg.replace('bg-[', '').replace(']', ''),
+                color: theme.text.replace('text-[', '').replace(']', ''),
+              }}
+            />
+          </div>
         </div>
 
         {/* Quest List */}
         <div
           className="p-6 overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 100px)' }}
+          style={{ maxHeight: 'calc(100vh - 180px)' }}
         >
-          {completedQuests.length === 0 ? (
+          {filteredQuests.length === 0 ? (
             <p className={`text-sm ${theme.textMuted} text-center no-select`}>
-              No completed quests yet
+              {searchQuery ? 'No quests match your search' : 'No completed quests yet'}
             </p>
           ) : (
             <div className="space-y-3">
-              {completedQuests.map((quest, index) => (
+              {filteredQuests.map((quest, index) => (
                 <div
                   key={quest.id}
                   className={`flex items-center justify-between p-4 brutal-card ${theme.surfaceHighlight} transition-all duration-200`}
@@ -95,6 +152,7 @@ export const CompletedQuestsDrawer = ({
                         textDecoration: 'line-through',
                         opacity: 0.7,
                       }}
+                      title={quest.title}
                     >
                       {quest.title}
                     </div>
@@ -105,7 +163,7 @@ export const CompletedQuestsDrawer = ({
                     </div>
                   </div>
                   <button
-                    onClick={() => deleteCompletedQuest(quest.id)}
+                    onClick={() => handleDeleteClick(quest)}
                     className={`ml-3 px-3 py-2 brutal-btn cursor-pointer no-select`}
                     style={{
                       background: theme.surfaceHighlight
@@ -122,6 +180,17 @@ export const CompletedQuestsDrawer = ({
           )}
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={questToDelete !== null}
+        title="DELETE QUEST?"
+        message={`Delete "${questToDelete?.title || 'this quest'}"? This action cannot be undone.`}
+        confirmText="DELETE"
+        cancelText="CANCEL"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        currentTheme={currentTheme}
+      />
     </>
   );
 };
