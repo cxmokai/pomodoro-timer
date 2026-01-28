@@ -44,20 +44,43 @@ export const useTimer = () => {
     const defaultDuration = settings.workDuration * 60;
 
     if (saved) {
-      // Calculate elapsed time if timer was running
-      let restoredTimeLeft = saved.initialTimeLeft;
+      // Get the correct duration for current mode
+      const getDurationForMode = (currentMode: TimerMode): number => {
+        switch (currentMode) {
+          case 'work':
+            return settings.workDuration * 60;
+          case 'shortBreak':
+            return settings.shortBreakDuration * 60;
+          case 'longBreak':
+            return settings.longBreakDuration * 60;
+        }
+      };
+
+      const currentModeDuration = getDurationForMode(saved.mode);
+
+      // If timer is running, restore with elapsed time calculation
       if (saved.isRunning && saved.sessionStartTime) {
         const elapsed = Math.floor((Date.now() - saved.sessionStartTime) / 1000);
-        restoredTimeLeft = Math.max(0, saved.initialTimeLeft - elapsed);
+        const restoredTimeLeft = Math.max(0, saved.initialTimeLeft - elapsed);
+
+        return {
+          mode: saved.mode,
+          timeLeft: restoredTimeLeft,
+          isRunning: restoredTimeLeft > 0,
+          sessionCount: saved.sessionCount,
+          initialDuration: saved.initialTimeLeft,
+          sessionStartTime: saved.sessionStartTime,
+        };
       }
 
+      // If timer is not running, use current settings instead of saved initialTimeLeft
       return {
         mode: saved.mode,
-        timeLeft: restoredTimeLeft,
-        isRunning: saved.sessionStartTime ? restoredTimeLeft > 0 : false,
+        timeLeft: currentModeDuration,
+        isRunning: false,
         sessionCount: saved.sessionCount,
-        initialDuration: saved.initialTimeLeft,
-        sessionStartTime: saved.sessionStartTime,
+        initialDuration: currentModeDuration,
+        sessionStartTime: null,
       };
     }
 
