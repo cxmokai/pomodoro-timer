@@ -347,14 +347,10 @@ export const HistoryDrawer = ({
                       className={`text-xs font-bold ${theme.textMuted} mb-3 px-2 no-select flex items-center gap-2`}
                     >
                       <span>{dateKey}</span>
-                      <span className="flex items-center gap-1">
-                        <Timer className="w-3 h-3" />
-                        {dateToPomodoroCount(dateKey)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Diamond className="w-3 h-3" />
-                        {dateQuests.length}
-                      </span>
+                      <Timer className="w-3 h-3" />
+                      <span>{dateToPomodoroCount(dateKey)}</span>
+                      <Diamond className="w-3 h-3" />
+                      <span>{dateQuests.length}</span>
                     </div>
 
                     {/* Quests for this date */}
