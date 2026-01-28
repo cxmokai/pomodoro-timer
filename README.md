@@ -1,26 +1,64 @@
-# Pomodoro Timer
+# PPX Pomodoro
 
 A beautiful, feature-rich Pomodoro timer web application built with React, TypeScript, and Tailwind CSS, inspired by the [Zed](https://zed.dev/) code editor design.
 
+![PPX Pomodoro](https://img.shields.io/badge/version-v1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 ## Features
 
-- **Timer Display**: Circular progress ring with digital time display (MM:SS format)
-- **Multiple Modes**: Work, Short Break, and Long Break
-- **Auto Long Break**: Automatically triggers long break after configurable number of work sessions (default: 4)
-- **Task Display**: Simple input field to display and edit your current task
-- **Sound Notifications**: Audio alerts when timer completes
-- **4 Themes**:
-  - Zed Dark (default)
-  - Zed Light
-  - Midnight
-  - Forest
-- **Keyboard Shortcuts**:
-  - `Space` / `K`: Start/Pause timer
-  - `R`: Reset timer
-  - `S`: Skip to next mode
-  - `T`: Toggle settings panel
-  - `Esc`: Close settings panel
-  - `1-4`: Quick switch between themes
+### Timer
+
+- **Three Modes**: Work, Short Break, and Long Break with configurable durations
+- **Visual Progress**: Brutalist digital display with animated progress bar
+- **Auto Long Break**: Automatically triggers long break after configurable work sessions (default: 4)
+- **Sound Notifications**: Custom three-tone melody when timer completes
+- **Timer Persistence**: State saved across page refreshes
+
+### Quest/Task Management
+
+- **Active Quest**: Set and track your current quest for each pomodoro session
+- **Yesterday's Quest Recovery**: Prompt to continue or discard incomplete quests from previous days
+- **Completion Confirmation**: Dialog to confirm quest completion
+- **Quest History**: View all completed quests grouped by date
+
+### Session Tracking
+
+- **Automatic Recording**: All sessions automatically logged with duration and status
+- **History Drawer**: View complete session history grouped by date
+- **Statistics Summary**: Total sessions, completed count, and skipped count
+- **Status Tracking**: Sessions marked as completed, skipped, or reset
+
+### Authentication & Cloud Sync
+
+- **Social Login**: Sign in with Google or GitHub
+- **Account Linking**: Connect multiple providers to a single account
+- **Real-time Sync**: Settings, quests, and sessions sync across devices
+- **Offline Support**: Local storage fallback with automatic sync on reconnect
+
+### Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Space` / `K` | Start/Pause timer |
+| `R` | Reset timer |
+| `S` | Skip to next mode |
+| `T` | Toggle settings |
+| `H` | Toggle history |
+| `Esc` | Close modals/drawers |
+
+### Themes
+
+- **Dark Theme** (default)
+- **Light Theme**
+- Quick theme switch in settings or header
+
+### Settings
+
+- **Timer Durations**: Work (1-60 min), Short Break (1-15 min), Long Break (5-30 min)
+- **Long Break Interval**: Configure after how many work sessions (2-8)
+- **Sound Toggle**: Enable/disable notification sound
+- **Timezone**: 27 timezone options for accurate date tracking
 
 ## Tech Stack
 
@@ -28,7 +66,88 @@ A beautiful, feature-rich Pomodoro timer web application built with React, TypeS
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
+- **Firebase** - Authentication and cloud sync (Firestore)
 - **Lucide React** - Icons
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and [pnpm](https://pnpm.io/)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/cxmokai/ppx-pomodoro.git
+cd ppx-pomodoro
+
+# Install dependencies
+pnpm install
+```
+
+### Development
+
+```bash
+pnpm run dev
+```
+
+The application will be available at `http://localhost:5173/`
+
+### Build
+
+```bash
+pnpm run build
+```
+
+### Preview Production Build
+
+```bash
+pnpm run preview
+```
+
+## Live Demo
+
+[https://ppx.kai.moe](https://ppx.kai.moe)
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── ConfirmModal.tsx      # Reusable confirmation dialog
+│   ├── Controls.tsx          # Start/Pause/Reset/Skip buttons
+│   ├── DailySummary.tsx      # Daily statistics display
+│   ├── Header.tsx            # App header with controls
+│   ├── HistoryDrawer.tsx     # Session history panel
+│   ├── ModeBadge.tsx         # Mode indicator badge
+│   ├── Progress.tsx          # Timer progress bar
+│   ├── QuestHistory.tsx      # Completed quests list
+│   ├── QuestInput.tsx        # Current quest input
+│   ├── RecoverQuestModal.tsx # Yesterday's quest recovery
+│   ├── SettingsModal.tsx     # Settings panel
+│   ├── SignOutTooltip.tsx    # Sign-out confirmation
+│   ├── ThemeProvider.tsx     # Dark/light theme provider
+│   ├── TimeDisplay.tsx       # Digital time display
+│   └── TimerCard.tsx         # Main timer card
+├── contexts/
+│   ├── AccountLinkingContext.tsx  # Account linking state
+│   ├── AuthContext.tsx            # Authentication state
+│   └── DataContext.tsx            # App data state
+├── hooks/
+│   ├── useAccountLinking.ts  # Account linking logic
+│   ├── useAuth.ts            # Authentication logic
+│   ├── useData.ts            # Data sync logic
+│   └── useTimer.ts           # Timer logic
+├── lib/
+│   └── firebase.ts           # Firebase initialization
+├── utils/
+│   ├── date.ts               # Date/timezone utilities
+│   ├── sound.ts              # Audio notification
+│   └── types.ts              # TypeScript types
+├── App.tsx                   # Main application
+└── main.tsx                  # Entry point
+```
 
 ## Getting Started
 
@@ -77,33 +196,10 @@ src/
 └── main.tsx                  # Application entry point
 ```
 
-## Customization
-
-### Adjusting Durations
-
-Open the Settings panel (press `T`) to customize:
-
-- Work duration (1-60 minutes, default: 25)
-- Short break (1-15 minutes, default: 5)
-- Long break (5-30 minutes, default: 15)
-- Long break interval (2-8 work sessions, default: 4)
-
-### Adding New Themes
-
-Edit `src/utils/themes.ts` and add a new theme to the `themes` object:
-
-```typescript
-export const themes: Record<string, Theme> = {
-  // ... existing themes
-  yourTheme: {
-    name: 'Your Theme',
-    bg: 'bg-[#123456]',
-    text: 'text-white',
-    // ... other theme properties
-  },
-};
-```
-
 ## License
 
 MIT
+
+---
+
+Made with ❤️ by [kai](https://github.com/cxmokai)
