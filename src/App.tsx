@@ -129,16 +129,16 @@ function AppContent() {
             </button>
             <button
               onClick={() => setIsSettingsOpen(true)}
-              className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center gap-2 cursor-pointer no-select`}
+              className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center justify-center cursor-pointer no-select`}
               style={{
                 background: theme.surfaceHighlight
                   .replace('bg-[', '')
                   .replace(']', ''),
                 color: theme.text.replace('text-[', '').replace(']', ''),
               }}
+              title="Settings"
             >
               <Settings className="w-4 h-4" />
-              <span>SETTINGS</span>
             </button>
           </div>
         </header>

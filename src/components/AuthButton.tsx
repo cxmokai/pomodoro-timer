@@ -29,7 +29,7 @@ export function AuthButton({ theme }: AuthButtonProps) {
     return (
       <button
         onClick={() => signOut()}
-        className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center gap-2 cursor-pointer no-select`}
+        className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center justify-center cursor-pointer no-select`}
         style={{
           background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
           color: theme.text.replace('text-[', '').replace(']', ''),
@@ -37,7 +37,6 @@ export function AuthButton({ theme }: AuthButtonProps) {
         title={`Sign out (${user.email})`}
       >
         <LogOut className="w-4 h-4" />
-        <span className="hidden sm:inline max-w-[150px] truncate">{user.email}</span>
       </button>
     );
   }
@@ -45,7 +44,7 @@ export function AuthButton({ theme }: AuthButtonProps) {
   return (
     <button
       onClick={() => signInWithGoogle()}
-      className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center gap-2 cursor-pointer no-select`}
+      className={`brutal-btn text-sm px-3 py-2 h-10 flex items-center justify-center cursor-pointer no-select`}
       style={{
         background: theme.surfaceHighlight.replace('bg-[', '').replace(']', ''),
         color: theme.text.replace('text-[', '').replace(']', ''),
@@ -53,7 +52,6 @@ export function AuthButton({ theme }: AuthButtonProps) {
       title="Sign in with Google to sync data across devices"
     >
       <LogIn className="w-4 h-4" />
-      <span className="hidden sm:inline">SIGN IN</span>
     </button>
   );
 }
