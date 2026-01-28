@@ -149,6 +149,12 @@ export const useTimer = () => {
       sessionStartTime: isRunning ? sessionStartTimeRef.current : null,
       initialTimeLeft: isRunning ? initialDuration : timeLeft,
     };
+    console.log('[Timer] Saving state:', {
+      ...stateToSave,
+      timeLeft,
+      initialDuration,
+      sessionStartTimeRef: sessionStartTimeRef.current,
+    });
     saveTimerState(stateToSave);
   }, [mode, isRunning, sessionCount, initialDuration, timeLeft]);
 
