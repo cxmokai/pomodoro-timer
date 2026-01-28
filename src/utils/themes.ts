@@ -136,15 +136,6 @@ export interface PomodoroData {
   dailyRecords: Record<string, DailyRecord>;  // key: date string
 }
 
-export interface FirestoreUserData {
-  // Keep flat structure for Firestore simplicity
-  sessions: PomodoroSession[];
-  quests: PomodoroQuest[];
-  settings: PomodoroSettings;
-  dailyRecords: Record<string, DailyRecord>;
-  updatedAt: number;
-}
-
 // Account Linking Types
 import type { OAuthCredential } from 'firebase/auth';
 
