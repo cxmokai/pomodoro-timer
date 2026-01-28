@@ -85,20 +85,6 @@ export const useTimer = () => {
     const defaultDuration = settings.workDuration * 60;
 
     if (saved) {
-      // Get the correct duration for current mode
-      const getDurationForMode = (currentMode: TimerMode): number => {
-        switch (currentMode) {
-          case 'work':
-            return settings.workDuration * 60;
-          case 'shortBreak':
-            return settings.shortBreakDuration * 60;
-          case 'longBreak':
-            return settings.longBreakDuration * 60;
-        }
-      };
-
-      const currentModeDuration = getDurationForMode(saved.mode);
-
       // If timer is running, restore with elapsed time calculation
       if (saved.isRunning && saved.sessionStartTime) {
         const elapsed = Math.floor((Date.now() - saved.sessionStartTime) / 1000);
@@ -114,13 +100,14 @@ export const useTimer = () => {
         };
       }
 
-      // If timer is not running, use current settings instead of saved initialTimeLeft
+      // If timer is not running, use saved initialTimeLeft (which is the paused timeLeft)
+      // or current settings if no saved state
       return {
         mode: saved.mode,
-        timeLeft: currentModeDuration,
+        timeLeft: saved.initialTimeLeft,
         isRunning: false,
         sessionCount: saved.sessionCount,
-        initialDuration: currentModeDuration,
+        initialDuration: saved.initialTimeLeft,
         sessionStartTime: null,
       };
     }
@@ -144,6 +131,7 @@ export const useTimer = () => {
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sessionStartTimeRef = useRef<number | null>(initialState.sessionStartTime);
+  const isInitializedRef = useRef(false);
 
   // Save state to sessionStorage whenever it changes
   useEffect(() => {
@@ -152,18 +140,21 @@ export const useTimer = () => {
       isRunning,
       sessionCount,
       sessionStartTime: sessionStartTimeRef.current,
-      initialTimeLeft: initialDuration,
+      initialTimeLeft: isRunning ? initialDuration : timeLeft,
     };
     saveTimerState(stateToSave);
-  }, [mode, isRunning, sessionCount, initialDuration]);
+  }, [mode, isRunning, sessionCount, initialDuration, timeLeft]);
 
+  // Update timeLeft when mode changes (but not on initial render)
   useEffect(() => {
-    const duration = getModeDuration(mode);
-    // Only reset if not restoring from saved state
-    if (!loadTimerState()) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (isInitializedRef.current) {
+      const duration = getModeDuration(mode);
       setTimeLeft(duration);
       setInitialDuration(duration);
+      setIsRunning(false);
+      sessionStartTimeRef.current = null;
+    } else {
+      isInitializedRef.current = true;
     }
   }, [mode, getModeDuration]);
 
