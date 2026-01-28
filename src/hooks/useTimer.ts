@@ -88,7 +88,6 @@ export const useTimer = () => {
   // Restore state from sessionStorage on mount
   const getInitialState = () => {
     const saved = loadTimerState();
-    const defaultDuration = settings.workDuration * 60;
 
     if (saved) {
       // If timer is running, restore with elapsed time calculation
@@ -118,6 +117,8 @@ export const useTimer = () => {
       };
     }
 
+    // No saved state, use current settings (might be default or loaded from Firebase)
+    const defaultDuration = settings.workDuration * 60;
     return {
       mode: 'work' as TimerMode,
       timeLeft: defaultDuration,
