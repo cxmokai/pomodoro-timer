@@ -26,4 +26,5 @@ export {
   Search,
   Target,
   Github,
+  Plus,
 } from 'lucide-react';
