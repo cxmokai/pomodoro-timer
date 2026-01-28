@@ -66,51 +66,9 @@ export const useTimer = () => {
     ]
   );
 
-  const hasRestoredStateRef = useRef(false);
+  const hadSavedTimerStateRef = useRef(loadTimerState() !== null);
   const hasCompletedInitialLoadRef = useRef(false);
   const lastKnownSettingsRef = useRef(settings);
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    if (!hasRestoredStateRef.current) {
-      hasRestoredStateRef.current = true;
-      lastKnownSettingsRef.current = settings;
-      return;
-    }
-
-    if (!hasCompletedInitialLoadRef.current) {
-      hasCompletedInitialLoadRef.current = true;
-      lastKnownSettingsRef.current = settings;
-      return;
-    }
-
-    // Check if settings actually changed (user explicitly changed them)
-    if (
-      lastKnownSettingsRef.current.workDuration !== settings.workDuration ||
-      lastKnownSettingsRef.current.shortBreakDuration !==
-        settings.shortBreakDuration ||
-      lastKnownSettingsRef.current.longBreakDuration !==
-        settings.longBreakDuration
-    ) {
-      // User changed settings, clear saved state and reset timer
-      clearTimerState();
-      const newDuration = settings.workDuration * 60;
-      setTimeLeft(newDuration);
-      setInitialDuration(newDuration);
-      setIsRunning(false);
-      sessionStartTimeRef.current = null;
-      elapsedTimeRef.current = 0;
-      lastKnownSettingsRef.current = settings;
-    }
-  }, [
-    settings.workDuration,
-    settings.shortBreakDuration,
-    settings.longBreakDuration,
-    isLoading,
-  ]);
-
-  // Restore state from sessionStorage on mount
   const getInitialState = () => {
     const saved = loadTimerState();
 
@@ -198,6 +156,48 @@ export const useTimer = () => {
   );
   const elapsedTimeRef = useRef<number>(initialState.elapsedTime);
   const prevModeRef = useRef<TimerMode | null>(null);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (!hasCompletedInitialLoadRef.current) {
+      hasCompletedInitialLoadRef.current = true;
+
+      if (!hadSavedTimerStateRef.current && !isRunning) {
+        const newDuration = getModeDuration(mode);
+        setTimeLeft(newDuration);
+        setInitialDuration(newDuration);
+      }
+
+      lastKnownSettingsRef.current = settings;
+      return;
+    }
+
+    if (
+      lastKnownSettingsRef.current.workDuration !== settings.workDuration ||
+      lastKnownSettingsRef.current.shortBreakDuration !==
+        settings.shortBreakDuration ||
+      lastKnownSettingsRef.current.longBreakDuration !==
+        settings.longBreakDuration
+    ) {
+      clearTimerState();
+      const newDuration = getModeDuration(mode);
+      setTimeLeft(newDuration);
+      setInitialDuration(newDuration);
+      setIsRunning(false);
+      sessionStartTimeRef.current = null;
+      elapsedTimeRef.current = 0;
+      lastKnownSettingsRef.current = settings;
+    }
+  }, [
+    settings.workDuration,
+    settings.shortBreakDuration,
+    settings.longBreakDuration,
+    isLoading,
+    mode,
+    getModeDuration,
+    isRunning,
+  ]);
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
