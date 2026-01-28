@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Trash2, X, Search, CheckCircle2, History, Timer, Diamond } from './icons';
+import { Trash2, X, Search, CheckCircle2, History, Timer, Target } from './icons';
 import { ConfirmModal } from './ConfirmModal';
 import { themes } from '../utils/themes';
 import type { PomodoroQuest } from '../utils/themes';
@@ -349,7 +349,7 @@ export const HistoryDrawer = ({
                       <span>{dateKey}</span>
                       <Timer className="w-3 h-3" />
                       <span>{dateToPomodoroCount(dateKey)}</span>
-                      <Diamond className="w-3 h-3" />
+                      <Target className="w-3 h-3" />
                       <span>{dateQuests.length}</span>
                     </div>
 

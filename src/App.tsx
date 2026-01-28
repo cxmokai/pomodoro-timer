@@ -17,7 +17,6 @@ import {
   Settings,
   Sun,
   Moon,
-  Diamond,
   History,
   Target,
 } from './components/icons';
@@ -89,7 +88,7 @@ function AppContent() {
           <h1
             className={`text-2xl tracking-tight ${theme.text} no-select flex items-center gap-2`}
           >
-            <Diamond className="w-4 h-4" />
+            <Target className="w-4 h-4" />
             PPX POMODORO
             {todayCompletedPomodoros > 0 && (
               <span
