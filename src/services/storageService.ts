@@ -122,8 +122,6 @@ class SyncManager {
       try {
         const docRef = doc(db, COLLECTION, getUserId());
         await setDoc(docRef, {
-          sessions: dataToWrite.sessions || [],
-          quests: dataToWrite.quests || [],
           settings: dataToWrite.settings,
           dailyRecords: dataToWrite.dailyRecords || {},
           updatedAt: serverTimestamp(),
@@ -207,8 +205,6 @@ export const loadDataFromFirestore = async (): Promise<PomodoroData | null> => {
     if (docSnap.exists()) {
       const data = docSnap.data();
       return {
-        sessions: data.sessions || [],
-        quests: data.quests || [],
         settings: data.settings || getDefaultSettings(),
         dailyRecords: data.dailyRecords || {},
         lastUpdated: Date.now(),
@@ -239,8 +235,6 @@ export const subscribeToData = (
         if (syncManager.shouldAcceptCloudData(hasPendingWrites)) {
           // Use Firestore's updatedAt timestamp to avoid infinite loop
           const cloudData: PomodoroData = {
-            sessions: data.sessions || [],
-            quests: data.quests || [],
             settings: data.settings || getDefaultSettings(),
             dailyRecords: data.dailyRecords || {},
             lastUpdated: data.updatedAt ? data.updatedAt.toMillis() : Date.now(),
@@ -269,11 +263,17 @@ const loadDataFromLocalStorage = (): PomodoroData => {
       if (!parsed.dailyRecords) {
         parsed.dailyRecords = {};
       }
-      return parsed;
+      // Ensure settings exists
+      if (!parsed.settings) {
+        parsed.settings = getDefaultSettings();
+      }
+      return {
+        settings: parsed.settings,
+        dailyRecords: parsed.dailyRecords,
+        lastUpdated: parsed.lastUpdated || Date.now(),
+      };
     }
     return {
-      sessions: [],
-      quests: [],
       settings: getDefaultSettings(),
       dailyRecords: {},
       lastUpdated: Date.now(),
@@ -281,8 +281,6 @@ const loadDataFromLocalStorage = (): PomodoroData => {
   } catch (error) {
     console.error('Failed to load from localStorage:', error);
     return {
-      sessions: [],
-      quests: [],
       settings: getDefaultSettings(),
       dailyRecords: {},
       lastUpdated: Date.now(),

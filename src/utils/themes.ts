@@ -116,7 +116,7 @@ export interface PomodoroSettings {
 }
 
 // Daily record for organizing data by date
-export interface DailyRecord {
+export interface PomodoroDailyRecord {
   date: string;  // ISO date: "2025-01-28"
   completedPomodoros: number;
   activeQuest: PomodoroQuest | null;
@@ -127,11 +127,9 @@ export interface DailyRecord {
 }
 
 export interface PomodoroData {
-  sessions: PomodoroSession[];
-  quests: PomodoroQuest[];
   settings: PomodoroSettings;
   lastUpdated: number;
-  dailyRecords: Record<string, DailyRecord>;  // key: date string
+  dailyRecords: Record<string, PomodoroDailyRecord>;  // key: date string
 }
 
 // Account Linking Types
