@@ -115,18 +115,6 @@ export const useTimer = () => {
     setInitialDuration(duration);
   }, [mode, sessionCount, settings, getModeDuration, saveIncompleteSession]);
 
-  const switchMode = useCallback(
-    (newMode: TimerMode) => {
-      saveIncompleteSession(mode);
-      setIsRunning(false);
-      setMode(newMode);
-      const duration = getModeDuration(newMode);
-      setTimeLeft(duration);
-      setInitialDuration(duration);
-    },
-    [getModeDuration, mode, saveIncompleteSession]
-  );
-
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       timerRef.current = setInterval(() => {
@@ -205,7 +193,6 @@ export const useTimer = () => {
     toggleTimer,
     resetTimer,
     skipMode,
-    switchMode,
     updateSettings,
   };
 };
