@@ -92,7 +92,7 @@ export interface PomodoroSession {
   startTime: number;
   endTime?: number;
   type: 'work' | 'shortBreak' | 'longBreak';
-  taskId?: string;
+  questId?: string;
   completed: boolean;
 }
 
