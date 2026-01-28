@@ -18,8 +18,8 @@ import {
   Sun,
   Moon,
   Diamond,
-  Timer,
   History,
+  Target,
 } from './components/icons';
 
 function AppContent() {
@@ -172,7 +172,7 @@ function AppContent() {
             className={`flex items-center justify-between mb-3 ${theme.textMuted}`}
           >
             <div className="flex items-center gap-2">
-              <Timer className="w-5 h-5" />
+              <Target className="w-5 h-5" />
               <span className="text-sm no-select">CURRENT QUEST</span>
             </div>
             <button

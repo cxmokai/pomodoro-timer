@@ -24,4 +24,5 @@ export {
   CheckCircle2,
   XCircle,
   Search,
+  Target,
 } from 'lucide-react';
