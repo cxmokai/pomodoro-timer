@@ -58,21 +58,23 @@ export const useTimer = () => {
     ]
   );
 
-  const settingsRef = useRef(settings);
-  const isFirstLoadRef = useRef(true);
+  const hasRestoredStateRef = useRef(false);
+  const lastKnownSettingsRef = useRef(settings);
 
-  // Clear saved state when settings change and reset timer (but not on first load)
+  // Clear saved state when user explicitly changes settings (not on initial load)
   useEffect(() => {
-    if (isFirstLoadRef.current) {
-      isFirstLoadRef.current = false;
-      settingsRef.current = settings;
+    // Skip if we haven't restored from sessionStorage yet
+    if (!hasRestoredStateRef.current) {
+      hasRestoredStateRef.current = true;
+      lastKnownSettingsRef.current = settings;
       return;
     }
 
-    if (settingsRef.current.workDuration !== settings.workDuration ||
-        settingsRef.current.shortBreakDuration !== settings.shortBreakDuration ||
-        settingsRef.current.longBreakDuration !== settings.longBreakDuration) {
-      // Settings changed, clear saved state and reset timer to new settings
+    // Check if settings actually changed (user explicitly changed them)
+    if (lastKnownSettingsRef.current.workDuration !== settings.workDuration ||
+        lastKnownSettingsRef.current.shortBreakDuration !== settings.shortBreakDuration ||
+        lastKnownSettingsRef.current.longBreakDuration !== settings.longBreakDuration) {
+      // User changed settings, clear saved state and reset timer
       clearTimerState();
       setMode((currentMode) => {
         const newDuration = getModeDuration(currentMode);
@@ -82,7 +84,7 @@ export const useTimer = () => {
         sessionStartTimeRef.current = null;
         return currentMode;
       });
-      settingsRef.current = settings;
+      lastKnownSettingsRef.current = settings;
     }
   }, [settings.workDuration, settings.shortBreakDuration, settings.longBreakDuration, getModeDuration]);
 
